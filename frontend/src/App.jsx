@@ -259,6 +259,7 @@ function App() {
                 ingredients={data.ingredients}
                 featuredBrands={featuredBrands}
                 discoverySections={personalizedDiscoverySections}
+                reviews={data.reviews}
                 skinProfile={skinProfile}
                 isLoading={isLoading}
                 onOpenQuiz={() => setShowQuiz(true)}

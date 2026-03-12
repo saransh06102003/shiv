@@ -13,8 +13,8 @@
     "description": "Daily gel cleanser for oil control and barrier support.",
     "productUrl": "https://www.nykaa.com/example-product-1",
     "images": [
-      "https://images.example.com/cerave-foaming-1.jpg",
-      "https://images.example.com/cerave-foaming-2.jpg"
+      "/skinmatch-product.png",
+      "/skinmatch-product.png"
     ],
     "includeIngredients": [
       "Niacinamide",
@@ -58,8 +58,8 @@
     "description": "Ultra-light broad spectrum sunscreen with high UVA protection.",
     "productUrl": "https://www.nykaa.com/example-product-2",
     "images": [
-      "https://images.example.com/anthelios-1.jpg",
-      "https://images.example.com/anthelios-2.jpg"
+      "/skinmatch-product.png",
+      "/skinmatch-product.png"
     ],
     "includeIngredients": [
       "UV Filters",

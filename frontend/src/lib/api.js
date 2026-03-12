@@ -3,8 +3,7 @@ const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://localhost:808
   ""
 );
 
-const DEFAULT_PRODUCT_IMAGE =
-  "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1000&q=80";
+const DEFAULT_PRODUCT_IMAGE = "/skinmatch-product.png";
 const productPrefetchCache = new Map();
 
 function buildUrl(path, query = {}) {
@@ -54,7 +53,7 @@ export function normalizeProduct(raw) {
     tags: raw.tags || [],
     isNew: Boolean(raw.isNew),
     isBestSeller: Boolean(raw.isBestSeller),
-    images: raw.images && raw.images.length > 0 ? raw.images : [DEFAULT_PRODUCT_IMAGE],
+    images: [DEFAULT_PRODUCT_IMAGE],
     routineStep: raw.routineStep || "Treat",
     compatibilityTags: raw.compatibilityTags || ["Derm-tested", "SkinMatch approved"]
   };

@@ -59,9 +59,9 @@ function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted = fa
         type="button"
         aria-label="Quick add to cart"
         onClick={handleQuickAdd}
-        className={`absolute right-3 top-14 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-200 bg-white text-lg text-rose-700 shadow-sm transition hover:-translate-y-0.5 ${
+        className={`absolute right-3 top-14 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-200 bg-white text-lg text-rose-700 shadow-sm transition ${
           added ? "ring-2 ring-rose-200" : ""
-        }`}
+        } opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto`}
       >
         +
       </button>
@@ -72,7 +72,7 @@ function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted = fa
         onTouchStart={() => prefetchProductById(product.id)}
         className="block"
       >
-        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-rose-50 via-white to-orange-50 p-4">
+        <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-rose-50 via-white to-orange-50 p-4">
           <img
             src={product.images[0]}
             alt={product.name}

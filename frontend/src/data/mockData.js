@@ -60,9 +60,9 @@ export const products = [
     isNew: true,
     isBestSeller: true,
     images: [
-      "https://images.unsplash.com/photo-1556227834-09f1de7a7d14?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?auto=format&fit=crop&w=1000&q=80"
+      "/skinmatch-product.png",
+      "/skinmatch-product.png",
+      "/skinmatch-product.png"
     ],
     routineStep: "Treat",
     compatibilityTags: ["Fragrance-free", "Pregnancy-safe", "Barrier-safe"]
@@ -86,9 +86,9 @@ export const products = [
     isNew: false,
     isBestSeller: true,
     images: [
-      "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1600180758890-6c312ed5ef4b?auto=format&fit=crop&w=1000&q=80"
+      "/skinmatch-product.png",
+      "/skinmatch-product.png",
+      "/skinmatch-product.png"
     ],
     routineStep: "Moisturize",
     compatibilityTags: ["Barrier-repair", "Sensitive-safe", "Alcohol-free"]
@@ -112,9 +112,9 @@ export const products = [
     isNew: true,
     isBestSeller: false,
     images: [
-      "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1573461160327-b450ce3d8e7f?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1611080541599-8c6dbde6ed28?auto=format&fit=crop&w=1000&q=80"
+      "/skinmatch-product.png",
+      "/skinmatch-product.png",
+      "/skinmatch-product.png"
     ],
     routineStep: "Treat",
     compatibilityTags: ["Glow-boosting", "Morning-routine", "Vegan"]
@@ -138,9 +138,9 @@ export const products = [
     isNew: false,
     isBestSeller: true,
     images: [
-      "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1626202653015-7e07b8c8d6d9?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1631214524020-9d20e1adf7b7?auto=format&fit=crop&w=1000&q=80"
+      "/skinmatch-product.png",
+      "/skinmatch-product.png",
+      "/skinmatch-product.png"
     ],
     routineStep: "Cleanse",
     compatibilityTags: ["pH-balanced", "Acne-safe", "Soap-free"]
@@ -164,9 +164,9 @@ export const products = [
     isNew: false,
     isBestSeller: true,
     images: [
-      "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1556227702-d1e4e7b33d1f?auto=format&fit=crop&w=1000&q=80"
+      "/skinmatch-product.png",
+      "/skinmatch-product.png",
+      "/skinmatch-product.png"
     ],
     routineStep: "Protect",
     compatibilityTags: ["No white cast", "Makeup-friendly", "All skin tones"]
@@ -190,9 +190,9 @@ export const products = [
     isNew: true,
     isBestSeller: false,
     images: [
-      "https://images.unsplash.com/photo-1591375372226-3531cf2d3578?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1556228841-a3d5c8fcd5f0?auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1607006483214-7a35f96d6d77?auto=format&fit=crop&w=1000&q=80"
+      "/skinmatch-product.png",
+      "/skinmatch-product.png",
+      "/skinmatch-product.png"
     ],
     routineStep: "Treat",
     compatibilityTags: ["Night-only", "Anti-aging", "Derm-tested"]
@@ -236,8 +236,8 @@ export const reviews = [
       "My pores look visibly smaller in two weeks, and it does not pill under moisturizer.",
     verifiedPurchase: true,
     helpfulCount: 72,
-    beforeImage: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80",
-    afterImage: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80",
+    beforeImage: "/skinmatch-product.png",
+    afterImage: "/skinmatch-product.png",
     createdAt: "2026-03-01T10:00:00.000Z"
   },
   {

@@ -77,6 +77,7 @@ function ProductPage({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [loadingReviews, setLoadingReviews] = useState(false);
   const [openSection, setOpenSection] = useState("key");
+  const [quantity, setQuantity] = useState(1);
   const [reviewFilters, setReviewFilters] = useState({
     skinType: "All",
     concern: "All",
@@ -232,6 +233,7 @@ function ProductPage({
                 <span className="font-semibold text-rose-700">★ {product.rating}</span>
                 <span>{product.reviews} reviews</span>
               </div>
+              <p className="mt-3 text-sm text-rose-900/70">{product.description}</p>
             </div>
 
             <div className="rounded-2xl border border-rose-100 bg-white p-4 shadow-soft lg:sticky lg:top-24">
@@ -243,8 +245,31 @@ function ProductPage({
                 </span>
               </div>
 
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                <button type="button" className="btn-primary" onClick={() => onAddToCart?.(product.id, 1)}>
+              <div className="mt-4 flex items-center justify-between rounded-full border border-rose-200 bg-rose-50/40 px-3 py-2">
+                <span className="text-xs font-semibold uppercase tracking-wide text-rose-700/80">Quantity</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-rose-200 bg-white text-sm font-semibold text-rose-700"
+                    aria-label="Decrease quantity"
+                  >
+                    -
+                  </button>
+                  <span className="min-w-[24px] text-center text-sm font-semibold text-skin-ink">{quantity}</span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((prev) => Math.min(99, prev + 1))}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-rose-200 bg-white text-sm font-semibold text-rose-700"
+                    aria-label="Increase quantity"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <button type="button" className="btn-primary" onClick={() => onAddToCart?.(product.id, quantity)}>
                   Add to Cart
                 </button>
                 <button type="button" className="btn-secondary" onClick={() => onToggleWishlist?.(product.id)}>

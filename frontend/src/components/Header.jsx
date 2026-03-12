@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { searchScoreForProduct } from "../lib/personalization";
 
 const NAV_CATEGORIES = [
@@ -98,8 +98,10 @@ function IconGrid() {
 
 function Header({ products, cartCount = 0, wishlistCount = 0, onOpenQuiz }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const activeSearch = new URLSearchParams(location.search).get("search")?.toLowerCase() || "";
 
   const productSuggestions = useMemo(() => {
     if (!query.trim()) return [];
@@ -119,9 +121,9 @@ function Header({ products, cartCount = 0, wishlistCount = 0, onOpenQuiz }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-rose-100/80 bg-white/90 backdrop-blur">
-      <div className="layout-container py-3">
-        <div className="layout-grid items-center">
+    <header className="sticky top-0 z-50 border-b border-rose-100/80 bg-white/90 shadow-sm backdrop-blur">
+      <div className="layout-container py-2">
+        <div className="layout-grid h-[70px] items-center">
           <Link to="/" className="col-span-6 flex items-center gap-2 md:col-span-2">
             <span className="h-10 w-10 rounded-full bg-gradient-to-br from-skin-rose to-pink-400 shadow-glow" />
             <div>
@@ -138,8 +140,8 @@ function Header({ products, cartCount = 0, wishlistCount = 0, onOpenQuiz }) {
                 onChange={(event) => setQuery(event.target.value)}
                 onFocus={() => setShowSuggestions(true)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 140)}
-                placeholder="Search products, brands, ingredients..."
-                aria-label="Search products, brands, ingredients"
+                placeholder="Search for skincare, makeup, brands…"
+                aria-label="Search for skincare, makeup, brands"
                 className="w-full bg-transparent text-sm font-medium outline-none placeholder:text-rose-900/40"
               />
             </div>
@@ -211,14 +213,14 @@ function Header({ products, cartCount = 0, wishlistCount = 0, onOpenQuiz }) {
           </div>
         </div>
 
-        <form className="relative mt-3 md:hidden" onSubmit={onSearchSubmit}>
+        <form className="relative mt-2 md:hidden" onSubmit={onSearchSubmit}>
           <div className="flex h-11 items-center gap-2 rounded-full border border-rose-200 bg-rose-50/50 px-4">
             <IconSearch />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search products, brands, ingredients..."
-              aria-label="Search products, brands, ingredients"
+              placeholder="Search for skincare, makeup, brands…"
+              aria-label="Search for skincare, makeup, brands"
               className="w-full bg-transparent text-sm font-medium outline-none placeholder:text-rose-900/40"
             />
           </div>
@@ -232,7 +234,11 @@ function Header({ products, cartCount = 0, wishlistCount = 0, onOpenQuiz }) {
               <button
                 type="button"
                 onClick={() => navigate(`/category?search=${encodeURIComponent(category.name)}`)}
-                className="rounded-full px-4 py-2 text-sm font-semibold text-rose-900/75 transition hover:bg-rose-50 hover:text-rose-700"
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                  activeSearch === category.name.toLowerCase()
+                    ? "bg-rose-100 text-rose-700"
+                    : "text-rose-900/75 hover:bg-rose-50 hover:text-rose-700"
+                }`}
               >
                 {category.name}
               </button>

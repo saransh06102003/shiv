@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import DiscoveryFeedCard from "../components/DiscoveryFeedCard";
 import HorizontalScroller from "../components/HorizontalScroller";
 import ProductCard from "../components/ProductCard";
+import ReviewCard from "../components/ReviewCard";
 import RoutineCard from "../components/RoutineCard";
 import SectionHeader from "../components/SectionHeader";
 
@@ -79,6 +80,14 @@ const BEAUTY_TIP_POSTS = [
   }
 ];
 
+const HOME_CATEGORIES = [
+  { label: "Skincare", description: "Serums, moisturizers, SPF" },
+  { label: "Makeup", description: "Lips, eyes, base" },
+  { label: "Haircare", description: "Shampoo, masks, oils" },
+  { label: "Fragrance", description: "Perfumes and mists" },
+  { label: "Wellness", description: "Supplements & rituals" }
+];
+
 function normalizeIngredientCard(ingredient, ingredients) {
   const matched = ingredients.find((item) => item.name.toLowerCase() === ingredient.name.toLowerCase());
   return {
@@ -92,6 +101,7 @@ function HomePage({
   ingredients = [],
   featuredBrands,
   discoverySections,
+  reviews = [],
   skinProfile,
   isLoading = false,
   onOpenQuiz,
@@ -125,13 +135,6 @@ function HomePage({
     () => [...products].sort((a, b) => b.discountPct - a.discountPct).slice(0, 12),
     [products]
   );
-  const categorySpotlights = useMemo(() => {
-    const categories = [...new Set(products.map((product) => product.category))].filter(Boolean);
-    return categories
-      .slice(0, 10)
-      .map((category) => products.find((product) => product.category === category))
-      .filter(Boolean);
-  }, [products]);
   const dermatologistPicks = useMemo(() => {
     const picks = products.filter((item) =>
       (item.tags || []).some((tag) => tag.toLowerCase().includes("dermatologist"))
@@ -139,6 +142,7 @@ function HomePage({
     if (picks.length > 0) return picks.slice(0, 12);
     return [...products].sort((a, b) => b.rating - a.rating).slice(0, 12);
   }, [products]);
+  const customerReviews = useMemo(() => reviews.slice(0, 4), [reviews]);
 
   const personalized = useMemo(() => {
     if (!skinProfile) return [];
@@ -156,9 +160,7 @@ function HomePage({
     [ingredients]
   );
   const discoveryFeed = useMemo(() => {
-    const fallbackImage =
-      products[0]?.images?.[0] ||
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1200&q=80";
+    const fallbackImage = products[0]?.images?.[0] || "/skinmatch-product.png";
 
     const routines = ROUTINE_COLLECTIONS.map((routine) => {
       const routineKey = routine.title.toLowerCase();
@@ -253,7 +255,7 @@ function HomePage({
 
   return (
     <div className="space-y-6 pb-20 md:pb-8">
-      <section className="glass-card overflow-hidden p-5 md:p-7">
+      <section className="glass-card overflow-hidden p-6 md:p-8">
         <div className="layout-grid items-center">
           <div className="col-span-12 space-y-4 lg:col-span-6">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-skin-gold">Premium Discovery</p>
@@ -265,12 +267,12 @@ function HomePage({
               Discover ingredient-first skincare, routine bundles, and on-trend launches made for your skin profile.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <Link to="/category" className="btn-primary">
-                Shop Now
+              <Link to="/category?search=Skincare" className="btn-primary">
+                Shop Skincare
               </Link>
-              <button type="button" className="btn-secondary" onClick={onOpenQuiz}>
-                Personalize Match
-              </button>
+              <Link to="/category?search=Makeup" className="btn-secondary">
+                Explore Makeup
+              </Link>
             </div>
             <div className="flex items-center gap-2">
               {heroSlides.map((slide, index) => (
@@ -308,6 +310,23 @@ function HomePage({
         </div>
       </section>
 
+      <section className="glass-card p-4 md:p-6">
+        <SectionHeader title="Shop by Category" subtitle="Curated beauty aisles designed for you." />
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {HOME_CATEGORIES.map((category) => (
+            <Link
+              key={category.label}
+              to={`/category?search=${encodeURIComponent(category.label)}`}
+              className="group rounded-2xl border border-rose-100 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-card"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-700/80">{category.label}</p>
+              <p className="mt-2 text-sm font-semibold text-skin-ink">{category.description}</p>
+              <span className="mt-4 inline-flex text-xs font-semibold text-skin-gold">Shop now →</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <HorizontalScroller
         title="Trending Products"
         subtitle="Top-rated favorites driving the buzz right now."
@@ -318,18 +337,6 @@ function HomePage({
         isLoading={isLoading}
         actionLabel="Shop trending"
         actionLink="/category?search=trending"
-      />
-
-      <HorizontalScroller
-        title="Shop by Category"
-        subtitle="Top picks from every beauty aisle."
-        products={categorySpotlights}
-        onAddToCart={onAddToCart}
-        onToggleWishlist={onToggleWishlist}
-        wishlistSet={wishlistSet}
-        isLoading={isLoading}
-        actionLabel="Browse all"
-        actionLink="/category"
       />
 
       <HorizontalScroller
@@ -367,6 +374,15 @@ function HomePage({
         actionLabel="See offers"
         actionLink="/category?search=offers"
       />
+
+      <section className="glass-card p-4 md:p-6">
+        <SectionHeader title="Customer Reviews" subtitle="Real results from the SkinMatch community." />
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+          {customerReviews.map((review) => (
+            <ReviewCard key={review.id} review={review} />
+          ))}
+        </div>
+      </section>
 
       <section className="glass-card p-4 md:p-6">
         <SectionHeader
