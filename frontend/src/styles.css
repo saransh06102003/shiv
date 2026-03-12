@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-skin-gradient text-skin-ink antialiased font-sans;
+  }
+}
+
+@layer components {
+  .layout-container {
+    @apply mx-auto w-full max-w-7xl px-4 md:px-6;
+  }
+
+  .layout-grid {
+    @apply grid grid-cols-12 gap-4 md:gap-6;
+  }
+
+  .glass-card {
+    @apply rounded-[20px] border border-rose-100/70 bg-white/90 shadow-soft backdrop-blur transition duration-300;
+  }
+
+  .section-title {
+    @apply font-sans text-3xl font-bold tracking-tight text-skin-ink;
+  }
+
+  .section-subtitle {
+    @apply mt-1 text-sm text-rose-900/65;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-gradient-to-r from-skin-rose to-pink-500 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:-translate-y-0.5 hover:shadow-card active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-rose-200 bg-white px-5 py-2.5 text-sm font-semibold text-rose-700 transition hover:-translate-y-0.5 hover:bg-rose-50 active:scale-[0.98];
+  }
+
+  .ingredient-badge {
+    @apply rounded-full border border-amber-200/60 bg-amber-50 px-3 py-1 text-[11px] font-semibold tracking-wide text-amber-700;
+  }
+
+  .routine-card {
+    @apply rounded-3xl border border-rose-100 bg-white p-5 shadow-soft transition duration-300 hover:-translate-y-0.5 hover:shadow-card;
+  }
+
+  .nav-icon-button {
+    @apply relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-rose-200 bg-white text-rose-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-rose-50 active:scale-[0.97];
+  }
+
+  .product-card {
+    @apply relative overflow-hidden rounded-xl border border-rose-100 bg-white shadow-soft transition duration-200 hover:-translate-y-1 hover:shadow-card;
+  }
+
+  .skeleton-card {
+    @apply rounded-xl border border-rose-100 bg-white p-4 shadow-soft;
+  }
+
+  .splash-logo {
+    opacity: 0;
+    animation: fadeUp 800ms ease forwards;
+    animation-delay: 680ms;
+  }
+
+  .splash-canvas canvas {
+    @apply h-full w-full;
+    filter: drop-shadow(0 16px 34px rgba(126, 68, 93, 0.16));
+  }
+}
+
+@layer utilities {
+  .scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+}

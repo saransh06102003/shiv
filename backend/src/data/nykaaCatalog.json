@@ -1,0 +1,89 @@
+[
+  {
+    "id": "cerave-foaming-cleanser",
+    "sku": "cerave-foaming-cleanser",
+    "brand": "CeraVe",
+    "name": "Foaming Facial Cleanser",
+    "category": "Cleansers",
+    "price": 1499,
+    "mrp": 1699,
+    "rating": 4.5,
+    "reviews": 1242,
+    "discountPct": 12,
+    "description": "Daily gel cleanser for oil control and barrier support.",
+    "productUrl": "https://www.nykaa.com/example-product-1",
+    "images": [
+      "https://images.example.com/cerave-foaming-1.jpg",
+      "https://images.example.com/cerave-foaming-2.jpg"
+    ],
+    "includeIngredients": [
+      "Niacinamide",
+      "Ceramides"
+    ],
+    "excludeIngredients": [
+      "Fragrance"
+    ],
+    "skinTypes": [
+      "Oily",
+      "Combination",
+      "Sensitive"
+    ],
+    "concerns": [
+      "Acne",
+      "Oiliness"
+    ],
+    "tags": [
+      "Best sellers",
+      "Dermatologist favorites"
+    ],
+    "compatibilityTags": [
+      "Sensitive-safe",
+      "Barrier-repair"
+    ],
+    "routineStep": "Cleanse",
+    "isNew": false,
+    "isBestSeller": true
+  },
+  {
+    "id": "laroche-anthelios-fluid",
+    "sku": "laroche-anthelios-fluid",
+    "brand": "La Roche-Posay",
+    "name": "Anthelios UVMune 400 Invisible Fluid SPF50+",
+    "category": "Sunscreen",
+    "price": 2899,
+    "mrp": 3299,
+    "rating": 4.7,
+    "reviews": 946,
+    "discountPct": 12,
+    "description": "Ultra-light broad spectrum sunscreen with high UVA protection.",
+    "productUrl": "https://www.nykaa.com/example-product-2",
+    "images": [
+      "https://images.example.com/anthelios-1.jpg",
+      "https://images.example.com/anthelios-2.jpg"
+    ],
+    "includeIngredients": [
+      "UV Filters",
+      "Niacinamide"
+    ],
+    "excludeIngredients": [
+      "Parabens"
+    ],
+    "skinTypes": [
+      "All"
+    ],
+    "concerns": [
+      "Sun protection",
+      "Pigmentation"
+    ],
+    "tags": [
+      "Best sellers"
+    ],
+    "compatibilityTags": [
+      "No white cast",
+      "Makeup-friendly"
+    ],
+    "routineStep": "Protect",
+    "isNew": false,
+    "isBestSeller": true
+  }
+]
