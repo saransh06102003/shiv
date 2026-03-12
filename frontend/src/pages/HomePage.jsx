@@ -2,9 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import DiscoveryFeedCard from "../components/DiscoveryFeedCard";
 import HorizontalScroller from "../components/HorizontalScroller";
-import ProductCard from "../components/ProductCard";
-import ReviewCard from "../components/ReviewCard";
-import RoutineCard from "../components/RoutineCard";
 import SectionHeader from "../components/SectionHeader";
 
 const TRENDING_INGREDIENTS = [
@@ -53,14 +50,6 @@ const ROUTINE_COLLECTIONS = [
   }
 ];
 
-const DISCOVERY_MODULES = [
-  "Best for Acne",
-  "Best for Oily Skin",
-  "Best for Dry Skin",
-  "Trending Skincare Products",
-  "Most Loved by Customers"
-];
-
 const BEAUTY_TIP_POSTS = [
   {
     title: "How to Layer Skincare Correctly",
@@ -99,12 +88,7 @@ function normalizeIngredientCard(ingredient, ingredients) {
 function HomePage({
   products,
   ingredients = [],
-  featuredBrands,
-  discoverySections,
-  reviews = [],
-  skinProfile,
   isLoading = false,
-  onOpenQuiz,
   onAddToCart,
   onToggleWishlist,
   wishlistSet
@@ -131,34 +115,11 @@ function HomePage({
       })
       .slice(0, 12);
   }, [products]);
-  const beautyDeals = useMemo(
-    () => [...products].sort((a, b) => b.discountPct - a.discountPct).slice(0, 12),
-    [products]
-  );
-  const dermatologistPicks = useMemo(() => {
-    const picks = products.filter((item) =>
-      (item.tags || []).some((tag) => tag.toLowerCase().includes("dermatologist"))
-    );
-    if (picks.length > 0) return picks.slice(0, 12);
-    return [...products].sort((a, b) => b.rating - a.rating).slice(0, 12);
+  const skincareSpotlight = useMemo(() => {
+    const filtered = products.filter((product) => product.category.toLowerCase().includes("skin"));
+    return (filtered.length > 0 ? filtered : products).slice(0, 10);
   }, [products]);
-  const customerReviews = useMemo(() => reviews.slice(0, 4), [reviews]);
 
-  const personalized = useMemo(() => {
-    if (!skinProfile) return [];
-    return products
-      .filter((product) => {
-        const matchSkin = skinProfile.skinType ? product.skinTypes.includes(skinProfile.skinType) : false;
-        const matchConcern = (skinProfile.skinConcerns || []).some((concern) => product.concerns.includes(concern));
-        return matchSkin || matchConcern;
-      })
-      .slice(0, 4);
-  }, [products, skinProfile]);
-
-  const ingredientCards = useMemo(
-    () => TRENDING_INGREDIENTS.map((ingredient) => normalizeIngredientCard(ingredient, ingredients)),
-    [ingredients]
-  );
   const discoveryFeed = useMemo(() => {
     const fallbackImage = products[0]?.images?.[0] || "/skinmatch-product.png";
 
@@ -250,11 +211,12 @@ function HomePage({
 
     return feed.slice(0, 10);
   }, [products, ingredients]);
+  const guideFeed = useMemo(() => discoveryFeed.filter((item) => item.type === "tip").slice(0, 3), [discoveryFeed]);
 
   const activeHero = heroSlides[activeSlide] || products[0];
 
   return (
-    <div className="space-y-6 pb-20 md:pb-8">
+    <div className="space-y-8 pb-20 md:space-y-10 md:pb-8">
       <section className="glass-card overflow-hidden p-6 md:p-8">
         <div className="layout-grid items-center">
           <div className="col-span-12 space-y-4 lg:col-span-6">
@@ -310,22 +272,68 @@ function HomePage({
         </div>
       </section>
 
-      <section className="glass-card p-4 md:p-6">
+      <section className="glass-card p-5 md:p-7">
         <SectionHeader title="Shop by Category" subtitle="Curated beauty aisles designed for you." />
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {HOME_CATEGORIES.map((category) => (
             <Link
               key={category.label}
               to={`/category?search=${encodeURIComponent(category.label)}`}
-              className="group rounded-2xl border border-rose-100 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-card"
+              className="group relative overflow-hidden rounded-[22px] border border-rose-100 bg-white p-5 transition hover:-translate-y-0.5 hover:shadow-card"
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-700/80">{category.label}</p>
-              <p className="mt-2 text-sm font-semibold text-skin-ink">{category.description}</p>
-              <span className="mt-4 inline-flex text-xs font-semibold text-skin-gold">Shop now →</span>
+              <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-rose-50/40 to-rose-100/60" />
+              <img
+                src="/skinmatch-product.png"
+                alt={category.label}
+                className="absolute -right-6 bottom-0 h-28 w-28 opacity-60 transition duration-500 group-hover:scale-105"
+              />
+              <div className="relative space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-700/80">
+                  {category.label}
+                </p>
+                <p className="text-sm font-semibold text-skin-ink">{category.description}</p>
+                <span className="inline-flex text-xs font-semibold text-skin-gold">Shop now →</span>
+              </div>
             </Link>
           ))}
         </div>
       </section>
+
+      <section className="glass-card bg-rose-50/60 p-5 md:p-7">
+        <SectionHeader
+          title="Beauty Inspiration"
+          subtitle="Editorial highlights and curated rituals for your routine."
+        />
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {discoveryFeed.map((post) => (
+            <DiscoveryFeedCard key={post.id} item={post} />
+          ))}
+        </div>
+      </section>
+
+      <HorizontalScroller
+        title="Featured Products"
+        subtitle="Editor-approved staples for every routine."
+        products={bestSellers}
+        onAddToCart={onAddToCart}
+        onToggleWishlist={onToggleWishlist}
+        wishlistSet={wishlistSet}
+        isLoading={isLoading}
+        actionLabel="Shop edits"
+        actionLink="/category?search=featured"
+      />
+
+      <HorizontalScroller
+        title="Skincare Spotlight"
+        subtitle="Hydration, glow, and barrier essentials."
+        products={skincareSpotlight}
+        onAddToCart={onAddToCart}
+        onToggleWishlist={onToggleWishlist}
+        wishlistSet={wishlistSet}
+        isLoading={isLoading}
+        actionLabel="Explore skincare"
+        actionLink="/category?search=Skincare"
+      />
 
       <HorizontalScroller
         title="Trending Products"
@@ -340,16 +348,25 @@ function HomePage({
       />
 
       <HorizontalScroller
-        title="Best Sellers"
-        subtitle="Most-loved skincare and beauty picks"
-        products={bestSellers}
+        title="New Arrivals"
+        subtitle="Fresh drops across skincare, makeup, and wellness"
+        products={newLaunches}
         onAddToCart={onAddToCart}
         onToggleWishlist={onToggleWishlist}
         wishlistSet={wishlistSet}
         isLoading={isLoading}
-        actionLabel="See all"
+        actionLabel="View all"
         actionLink="/category"
       />
+
+      <section className="glass-card bg-white/90 p-5 md:p-7">
+        <SectionHeader title="Beauty Guides" subtitle="Editorial reads designed for your routine." />
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {guideFeed.map((post) => (
+            <DiscoveryFeedCard key={post.id} item={post} />
+          ))}
+        </div>
+      </section>
 
       <HorizontalScroller
         title="New Arrivals"
@@ -363,149 +380,6 @@ function HomePage({
         actionLink="/category"
       />
 
-      <HorizontalScroller
-        title="Beauty Deals & Offers"
-        subtitle="Best discounts hand-picked for you."
-        products={beautyDeals}
-        onAddToCart={onAddToCart}
-        onToggleWishlist={onToggleWishlist}
-        wishlistSet={wishlistSet}
-        isLoading={isLoading}
-        actionLabel="See offers"
-        actionLink="/category?search=offers"
-      />
-
-      <section className="glass-card p-4 md:p-6">
-        <SectionHeader title="Customer Reviews" subtitle="Real results from the SkinMatch community." />
-        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-          {customerReviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
-          ))}
-        </div>
-      </section>
-
-      <section className="glass-card p-4 md:p-6">
-        <SectionHeader
-          title="Beauty Discovery Feed"
-          subtitle="Scroll like a social feed to discover routines, trending products, tips, and ingredient education."
-        />
-        <div className="mx-auto mt-4 max-w-3xl space-y-4">
-          {discoveryFeed.map((post) => (
-            <DiscoveryFeedCard key={post.id} item={post} />
-          ))}
-        </div>
-      </section>
-
-      <section className="glass-card p-4 md:p-6">
-        <SectionHeader
-          title="Trending Ingredients"
-          subtitle="Understand actives before you buy."
-          action={
-            <Link to="/ingredient-explorer" className="btn-secondary !px-4 !py-2">
-              Explore
-            </Link>
-          }
-        />
-
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {ingredientCards.map((ingredient) => (
-            <Link
-              key={ingredient.name}
-              to={`/ingredient-explorer?ingredient=${encodeURIComponent(ingredient.name)}`}
-              className="group rounded-2xl border border-rose-100 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-card"
-            >
-              <h3 className="text-sm font-semibold text-skin-ink">{ingredient.name}</h3>
-              <p className="mt-2 line-clamp-2 text-xs text-rose-900/70">{ingredient.text}</p>
-              <span className="mt-3 inline-block text-xs font-semibold text-skin-gold">Ingredient Guide →</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <HorizontalScroller
-        title="Dermatologist Picks"
-        subtitle="Curated products trusted by experts"
-        products={dermatologistPicks}
-        onAddToCart={onAddToCart}
-        onToggleWishlist={onToggleWishlist}
-        wishlistSet={wishlistSet}
-        isLoading={isLoading}
-        actionLabel="Explore"
-        actionLink="/category?search=dermatologist"
-      />
-
-      <section className="glass-card p-4 md:p-6">
-        <SectionHeader
-          title="Skincare Routines"
-          subtitle="Choose a routine path and start building your checklist."
-        />
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {ROUTINE_COLLECTIONS.map((routine) => (
-            <RoutineCard
-              key={routine.title}
-              title={routine.title}
-              description={routine.description}
-              steps={routine.steps}
-            />
-          ))}
-        </div>
-      </section>
-
-      {skinProfile && personalized.length > 0 ? (
-        <section className="glass-card p-4 md:p-6">
-          <SectionHeader title="Recommended For You" subtitle={`Matched for ${skinProfile.skinType} skin profile`} />
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {personalized.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={onAddToCart}
-                onToggleWishlist={onToggleWishlist}
-                isWishlisted={wishlistSet?.has(product.id)}
-              />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <section className="glass-card p-4 md:p-6">
-        <SectionHeader title="Discovery Modules" subtitle="Explore by concern, skin type, and customer love." />
-        <div className="flex flex-wrap gap-2">
-          {DISCOVERY_MODULES.map((module) => (
-            <Link
-              key={module}
-              to={`/category?search=${encodeURIComponent(module)}`}
-              className="rounded-full border border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-50"
-            >
-              {module}
-            </Link>
-          ))}
-          {discoverySections.map((section) => (
-            <Link
-              key={section.title}
-              to={`/category?search=${encodeURIComponent(section.title)}`}
-              className="rounded-full border border-amber-200/60 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-700"
-            >
-              {section.title}
-            </Link>
-          ))}
-        </div>
-
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {featuredBrands.slice(0, 10).map((brand) => (
-            <Link
-              key={brand}
-              to={`/category?search=${encodeURIComponent(brand)}`}
-              className="flex items-center gap-3 rounded-2xl border border-rose-100 bg-white p-3 transition hover:-translate-y-0.5 hover:shadow-soft"
-            >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-rose-200 to-orange-100 text-sm font-bold text-rose-700">
-                {brand.slice(0, 2).toUpperCase()}
-              </span>
-              <span className="text-sm font-semibold text-rose-900/80">{brand}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

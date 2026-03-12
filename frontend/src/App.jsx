@@ -17,7 +17,7 @@ import {
   reviews as fallbackReviews
 } from "./data/mockData";
 import { fetchBootstrapData, fetchUserProfile, saveUserProfile } from "./lib/api";
-import { profileScoreForProduct, sortProductsByProfile } from "./lib/personalization";
+import { sortProductsByProfile } from "./lib/personalization";
 
 const STORAGE_KEYS = {
   profile: "skinmatch.profile",
@@ -152,23 +152,6 @@ function App() {
     [personalizedProducts]
   );
 
-  const featuredBrands = useMemo(
-    () => [...new Set(personalizedProducts.map((product) => product.brand))].filter(Boolean).slice(0, 12),
-    [personalizedProducts]
-  );
-
-  const personalizedDiscoverySections = useMemo(
-    () =>
-      data.discoverySections.map((section) => ({
-        ...section,
-        productIds: [...section.productIds].sort(
-          (left, right) =>
-            profileScoreForProduct(productsById[right] || {}, skinProfile) -
-            profileScoreForProduct(productsById[left] || {}, skinProfile)
-        )
-      })),
-    [data.discoverySections, productsById, skinProfile]
-  );
 
   const wishlistSet = useMemo(() => new Set(wishlistIds), [wishlistIds]);
   const cartCount = useMemo(
@@ -257,12 +240,7 @@ function App() {
               <HomePage
                 products={personalizedProducts}
                 ingredients={data.ingredients}
-                featuredBrands={featuredBrands}
-                discoverySections={personalizedDiscoverySections}
-                reviews={data.reviews}
-                skinProfile={skinProfile}
                 isLoading={isLoading}
-                onOpenQuiz={() => setShowQuiz(true)}
                 onAddToCart={addToCart}
                 onToggleWishlist={toggleWishlist}
                 wishlistSet={wishlistSet}

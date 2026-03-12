@@ -43,8 +43,8 @@ export const ingredients = [
 export const products = [
   {
     id: "sm-101",
-    name: "Glass Skin Niacinamide Serum",
-    brand: "Lumora",
+    name: "Fit Me Matte + Poreless Foundation",
+    brand: "Maybelline",
     category: "Serums",
     rating: 4.8,
     reviews: 842,
@@ -69,8 +69,8 @@ export const products = [
   },
   {
     id: "sm-102",
-    name: "Velvet Barrier Cream",
-    brand: "Aurelia Skin",
+    name: "Sky High Mascara",
+    brand: "Maybelline",
     category: "Moisturizers",
     rating: 4.7,
     reviews: 613,
@@ -95,8 +95,8 @@ export const products = [
   },
   {
     id: "sm-103",
-    name: "Daily Dew Vitamin C Gel",
-    brand: "Nuvia",
+    name: "SuperStay Matte Ink Lipstick",
+    brand: "Maybelline",
     category: "Serums",
     rating: 4.5,
     reviews: 412,
@@ -121,8 +121,8 @@ export const products = [
   },
   {
     id: "sm-104",
-    name: "Cloud Silk Gel Cleanser",
-    brand: "Pure Habitat",
+    name: "Instant Age Rewind Concealer",
+    brand: "Maybelline",
     category: "Cleansers",
     rating: 4.6,
     reviews: 534,
@@ -147,8 +147,8 @@ export const products = [
   },
   {
     id: "sm-105",
-    name: "SPF 50 Invisible Fluid",
-    brand: "Solaris Lab",
+    name: "Baby Lips Lip Balm",
+    brand: "Maybelline",
     category: "Sunscreen",
     rating: 4.9,
     reviews: 1191,
@@ -173,8 +173,8 @@ export const products = [
   },
   {
     id: "sm-106",
-    name: "Overnight Retinol Recovery",
-    brand: "Derma Nova",
+    name: "Lakme 9to5 Primer + Matte Foundation",
+    brand: "Lakme",
     category: "Treatments",
     rating: 4.4,
     reviews: 325,

@@ -23,8 +23,8 @@ function DiscoveryFeedCard({ item }) {
   const style = FEED_STYLES[item.type] || FEED_STYLES.tip;
 
   return (
-    <article className="group overflow-hidden rounded-[28px] border border-rose-100 bg-white shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-card">
-      <div className="relative h-64 overflow-hidden bg-skin-hero sm:h-72">
+    <article className="group overflow-hidden rounded-[22px] border border-rose-100 bg-white shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-card">
+      <div className="relative h-52 overflow-hidden bg-skin-hero sm:h-60">
         <img
           src={item.image}
           alt={item.title}
