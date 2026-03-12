@@ -12,11 +12,23 @@ dotenv.config();
 const app = express();
 const port = Number(process.env.PORT || 8080);
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_ORIGIN || "*"
-  })
-);
+const rawOrigin = process.env.CLIENT_ORIGIN || "*";
+const allowedOrigins = rawOrigin
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsOptions = allowedOrigins.includes("*")
+  ? { origin: "*" }
+  : {
+      origin(origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error("Not allowed by CORS"));
+      }
+    };
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get("/health", (_req, res) => {
