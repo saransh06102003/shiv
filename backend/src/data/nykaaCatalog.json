@@ -1,89 +1,226 @@
 [
   {
-    "id": "cerave-foaming-cleanser",
-    "sku": "cerave-foaming-cleanser",
+    "id": "pdf-01",
     "brand": "Maybelline",
     "name": "Fit Me Matte + Poreless Foundation",
-    "category": "Cleansers",
-    "price": 1499,
-    "mrp": 1699,
-    "rating": 4.5,
-    "reviews": 1242,
-    "discountPct": 12,
-    "description": "Daily gel cleanser for oil control and barrier support.",
-    "productUrl": "https://www.nykaa.com/example-product-1",
     "images": [
-      "/skinmatch-product.png",
-      "/skinmatch-product.png"
-    ],
-    "includeIngredients": [
-      "Niacinamide",
-      "Ceramides"
-    ],
-    "excludeIngredients": [
-      "Fragrance"
-    ],
-    "skinTypes": [
-      "Oily",
-      "Combination",
-      "Sensitive"
-    ],
-    "concerns": [
-      "Acne",
-      "Oiliness"
-    ],
-    "tags": [
-      "Best sellers",
-      "Dermatologist favorites"
-    ],
-    "compatibilityTags": [
-      "Sensitive-safe",
-      "Barrier-repair"
-    ],
-    "routineStep": "Cleanse",
-    "isNew": false,
-    "isBestSeller": true
+      "/pdf-products/product-01.jpg"
+    ]
   },
   {
-    "id": "laroche-anthelios-fluid",
-    "sku": "laroche-anthelios-fluid",
+    "id": "pdf-02",
     "brand": "Maybelline",
     "name": "Sky High Mascara",
-    "category": "Sunscreen",
-    "price": 2899,
-    "mrp": 3299,
-    "rating": 4.7,
-    "reviews": 946,
-    "discountPct": 12,
-    "description": "Ultra-light broad spectrum sunscreen with high UVA protection.",
-    "productUrl": "https://www.nykaa.com/example-product-2",
     "images": [
-      "/skinmatch-product.png",
-      "/skinmatch-product.png"
-    ],
-    "includeIngredients": [
-      "UV Filters",
-      "Niacinamide"
-    ],
-    "excludeIngredients": [
-      "Parabens"
-    ],
-    "skinTypes": [
-      "All"
-    ],
-    "concerns": [
-      "Sun protection",
-      "Pigmentation"
-    ],
-    "tags": [
-      "Best sellers"
-    ],
-    "compatibilityTags": [
-      "No white cast",
-      "Makeup-friendly"
-    ],
-    "routineStep": "Protect",
-    "isNew": false,
-    "isBestSeller": true
+      "/pdf-products/product-02.jpg"
+    ]
+  },
+  {
+    "id": "pdf-03",
+    "brand": "Maybelline",
+    "name": "SuperStay Matte Ink Liquid Lipstick",
+    "images": [
+      "/pdf-products/product-03.jpg"
+    ]
+  },
+  {
+    "id": "pdf-04",
+    "brand": "Maybelline",
+    "name": "Instant Age Rewind Concealer",
+    "images": [
+      "/pdf-products/product-04.jpg"
+    ]
+  },
+  {
+    "id": "pdf-05",
+    "brand": "Lakme",
+    "name": "9to5 Primer + Matte Foundation",
+    "images": [
+      "/pdf-products/product-05.jpg"
+    ]
+  },
+  {
+    "id": "pdf-06",
+    "brand": "Lakme",
+    "name": "Eyeconic Kajal",
+    "images": [
+      "/pdf-products/product-06.jpg"
+    ]
+  },
+  {
+    "id": "pdf-07",
+    "brand": "Lakme",
+    "name": "Absolute Matte Lipstick",
+    "images": [
+      "/pdf-products/product-07.jpg"
+    ]
+  },
+  {
+    "id": "pdf-08",
+    "brand": "Lakme",
+    "name": "Sun Expert SPF 50 Sunscreen",
+    "images": [
+      "/pdf-products/product-08.jpg"
+    ]
+  },
+  {
+    "id": "pdf-09",
+    "brand": "Lakme",
+    "name": "Blush & Glow Face Wash",
+    "images": [
+      "/pdf-products/product-09.jpg"
+    ]
+  },
+  {
+    "id": "pdf-10",
+    "brand": "L'Oreal Paris",
+    "name": "Infallible 24H Fresh Wear Foundation",
+    "images": [
+      "/pdf-products/product-10.jpg"
+    ]
+  },
+  {
+    "id": "pdf-11",
+    "brand": "L'Oreal Paris",
+    "name": "Lash Paradise Mascara",
+    "images": [
+      "/pdf-products/product-11.jpg"
+    ]
+  },
+  {
+    "id": "pdf-12",
+    "brand": "L'Oreal Paris",
+    "name": "Revitalift Hyaluronic Acid Serum",
+    "images": [
+      "/pdf-products/product-12.jpg"
+    ]
+  },
+  {
+    "id": "pdf-13",
+    "brand": "L'Oreal Paris",
+    "name": "Color Riche Satin Lipstick",
+    "images": [
+      "/pdf-products/product-13.jpg"
+    ]
+  },
+  {
+    "id": "pdf-14",
+    "brand": "MAC",
+    "name": "Studio Fix Fluid SPF 15 Foundation",
+    "images": [
+      "/pdf-products/product-14.jpg"
+    ]
+  },
+  {
+    "id": "pdf-15",
+    "brand": "MAC",
+    "name": "Matte Lipstick Ruby Woo",
+    "images": [
+      "/pdf-products/product-15.jpg"
+    ]
+  },
+  {
+    "id": "pdf-16",
+    "brand": "MAC",
+    "name": "Prep + Prime Fix+ Setting Spray",
+    "images": [
+      "/pdf-products/product-16.jpg"
+    ]
+  },
+  {
+    "id": "pdf-17",
+    "brand": "MAC",
+    "name": "Powder Blush",
+    "images": [
+      "/pdf-products/product-17.jpg"
+    ]
+  },
+  {
+    "id": "pdf-18",
+    "brand": "The Ordinary",
+    "name": "Niacinamide 10% + Zinc 1% Serum",
+    "images": [
+      "/pdf-products/product-18.jpg"
+    ]
+  },
+  {
+    "id": "pdf-19",
+    "brand": "The Ordinary",
+    "name": "Hyaluronic Acid 2% + B5",
+    "images": [
+      "/pdf-products/product-19.jpg"
+    ]
+  },
+  {
+    "id": "pdf-20",
+    "brand": "Cetaphil",
+    "name": "Gentle Skin Cleanser",
+    "images": [
+      "/pdf-products/product-20.jpg"
+    ]
+  },
+  {
+    "id": "pdf-21",
+    "brand": "Cetaphil",
+    "name": "Moisturizing Cream",
+    "images": [
+      "/pdf-products/product-21.jpg"
+    ]
+  },
+  {
+    "id": "pdf-22",
+    "brand": "Cetaphil",
+    "name": "Daily Facial Cleanser",
+    "images": [
+      "/pdf-products/product-22.jpg"
+    ]
+  },
+  {
+    "id": "pdf-23",
+    "brand": "Cetaphil",
+    "name": "Bright Healthy Radiance Serum",
+    "images": [
+      "/pdf-products/product-23.jpg"
+    ]
+  },
+  {
+    "id": "pdf-24",
+    "brand": "Cetaphil",
+    "name": "Hydrating Eye Gel",
+    "images": [
+      "/pdf-products/product-24.jpg"
+    ]
+  },
+  {
+    "id": "pdf-25",
+    "brand": "Mamaearth",
+    "name": "Onion Hair Oil",
+    "images": [
+      "/pdf-products/product-25.jpg"
+    ]
+  },
+  {
+    "id": "pdf-26",
+    "brand": "Mamaearth",
+    "name": "Ubtan Face Wash",
+    "images": [
+      "/pdf-products/product-26.jpg"
+    ]
+  },
+  {
+    "id": "pdf-27",
+    "brand": "Mamaearth",
+    "name": "Vitamin C Face Serum",
+    "images": [
+      "/pdf-products/product-27.jpg"
+    ]
+  },
+  {
+    "id": "pdf-28",
+    "brand": "Mamaearth",
+    "name": "Tea Tree Face Wash",
+    "images": [
+      "/pdf-products/product-28.jpg"
+    ]
   }
 ]

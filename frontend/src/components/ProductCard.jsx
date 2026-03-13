@@ -72,7 +72,7 @@ function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted = fa
         onTouchStart={() => prefetchProductById(product.id)}
         className="block"
       >
-        <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-rose-50 via-white to-orange-50 p-4">
+        <div className="relative aspect-[4/5] overflow-hidden bg-white p-4">
           <img
             src={product.images[0]}
             alt={product.name}

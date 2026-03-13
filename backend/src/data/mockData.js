@@ -2,44 +2,44 @@ import fs from "fs";
 
 const categoryImagePool = {
   Cleansers: [
-    "/skinmatch-product.png",
-    "/skinmatch-product.png",
-    "/skinmatch-product.png",
-    "/skinmatch-product.png"
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg"
   ],
   Serums: [
-    "/skinmatch-product.png",
-    "/skinmatch-product.png",
-    "/skinmatch-product.png",
-    "/skinmatch-product.png"
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg"
   ],
   Moisturizers: [
-    "/skinmatch-product.png",
-    "/skinmatch-product.png",
-    "/skinmatch-product.png",
-    "/skinmatch-product.png"
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg"
   ],
   Sunscreen: [
-    "/skinmatch-product.png",
-    "/skinmatch-product.png",
-    "/skinmatch-product.png"
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg"
   ],
   Treatments: [
-    "/skinmatch-product.png",
-    "/skinmatch-product.png",
-    "/skinmatch-product.png"
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg"
   ],
   Masks: [
-    "/skinmatch-product.png",
-    "/skinmatch-product.png"
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg"
   ],
   Toners: [
-    "/skinmatch-product.png",
-    "/skinmatch-product.png"
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg"
   ],
   Essences: [
-    "/skinmatch-product.png",
-    "/skinmatch-product.png"
+    "/pdf-products/product-01.jpg",
+    "/pdf-products/product-01.jpg"
   ]
 };
 
@@ -221,65 +221,34 @@ const concernSignals = [
 ];
 
 const defaultProductSeeds = [
-  { brand: "Maybelline", name: "Fit Me Matte + Poreless Foundation", category: "Makeup", price: 599, useIcon: true },
-  { brand: "Maybelline", name: "Sky High Mascara", category: "Makeup", price: 549, useIcon: true },
-  { brand: "Maybelline", name: "SuperStay Matte Ink Lipstick", category: "Makeup", price: 199, useIcon: true },
-  { brand: "Maybelline", name: "Instant Age Rewind Concealer", category: "Makeup", price: 699, useIcon: true },
-  { brand: "Maybelline", name: "Baby Lips Lip Balm", category: "Makeup", price: 399, useIcon: true },
-
-  { brand: "Lakme", name: "Lakme 9to5 Primer + Matte Foundation", category: "Makeup", price: 650, useIcon: true },
-  { brand: "Lakme", name: "Lakme Eyeconic Kajal", category: "Makeup", price: 550, useIcon: true },
-  { brand: "Lakme", name: "Lakme Absolute Matte Lipstick", category: "Makeup", price: 249, useIcon: true },
-  { brand: "Lakme", name: "Lakme Sun Expert SPF 50 Sunscreen", category: "Makeup", price: 825, useIcon: true },
-  { brand: "Lakme", name: "Lakme Blush & Glow Face Wash", category: "Skincare", price: 499, useIcon: true },
-
-  { brand: "L’Oréal Paris", name: "L’Oréal Infallible 24H Foundation", category: "Makeup", price: 699, useIcon: true },
-  { brand: "L’Oréal Paris", name: "L’Oréal Lash Paradise Mascara", category: "Makeup", price: 999, useIcon: true },
-  { brand: "L’Oréal Paris", name: "L’Oréal Revitalift Hyaluronic Serum", category: "Makeup", price: 249, useIcon: true },
-  { brand: "L’Oréal Paris", name: "L’Oréal Color Riche Lipstick", category: "Makeup", price: 799, useIcon: true },
-  { brand: "L’Oréal Paris", name: "L’Oréal Extraordinary Oil Hair Serum", category: "Makeup", price: 1199, useIcon: true },
-
-  { brand: "MAC Cosmetics", name: "MAC Studio Fix Fluid Foundation", category: "Cleansers", price: 349, useIcon: true },
-  { brand: "MAC Cosmetics", name: "MAC Matte Lipstick Ruby Woo", category: "Skincare", price: 699, useIcon: true },
-  { brand: "MAC Cosmetics", name: "MAC Strobe Cream", category: "Cleansers", price: 349, useIcon: true },
-  { brand: "MAC Cosmetics", name: "MAC Prep + Prime Fix+ Spray", category: "Haircare", price: 449, useIcon: true },
-  { brand: "MAC Cosmetics", name: "MAC Powder Blush", category: "Cleansers", price: 349, useIcon: true },
-
-  { brand: "The Ordinary", name: "Niacinamide 10% + Zinc Serum", category: "Cleansers", price: 399, useIcon: true },
-  { brand: "The Ordinary", name: "Hyaluronic Acid 2% + B5", category: "Skincare", price: 299, useIcon: true },
-  { brand: "The Ordinary", name: "AHA 30% + BHA Peeling Solution", category: "Haircare", price: 499, useIcon: true },
-  { brand: "The Ordinary", name: "Retinol 0.5% in Squalane", category: "Haircare", price: 499, useIcon: true },
-  { brand: "The Ordinary", name: "Natural Moisturizing Factors + HA", category: "Skincare", price: 549, useIcon: true },
-
-  { brand: "Minimalist", name: "10% Niacinamide Face Serum", category: "Skincare", price: 599, useIcon: true },
-  { brand: "Minimalist", name: "Salicylic Acid Cleanser", category: "Cleansers", price: 299, useIcon: true },
-  { brand: "Minimalist", name: "SPF 50 Sunscreen", category: "Skincare", price: 599, useIcon: true },
-  { brand: "Minimalist", name: "Vitamin C 10% Serum", category: "Skincare", price: 699, useIcon: true },
-  { brand: "Minimalist", name: "Hyaluronic Acid Moisturizer", category: "Sunscreen", price: 399, useIcon: true },
-
-  { brand: "Neutrogena", name: "Hydro Boost Water Gel", category: "Cleansers", price: 395, useIcon: true },
-  { brand: "Neutrogena", name: "Ultra Sheer SPF 50 Sunscreen", category: "Moisturizers", price: 575, useIcon: true },
-  { brand: "Neutrogena", name: "Deep Clean Face Wash", category: "Skincare", price: 699, useIcon: true },
-  { brand: "Neutrogena", name: "Oil Free Moisturizer", category: "Sunscreen", price: 549, useIcon: true },
-  { brand: "Neutrogena", name: "Rapid Wrinkle Repair Serum", category: "Bodycare", price: 475, useIcon: true },
-
-  { brand: "Cetaphil", name: "Gentle Skin Cleanser", category: "Skincare", price: 595, useIcon: true },
-  { brand: "Cetaphil", name: "Moisturizing Cream", category: "Moisturizers", price: 595, useIcon: true },
-  { brand: "Cetaphil", name: "Daily Facial Cleanser", category: "Sunscreen", price: 495, useIcon: true },
-  { brand: "Cetaphil", name: "Bright Healthy Radiance Serum", category: "Moisturizers", price: 595, useIcon: true },
-  { brand: "Cetaphil", name: "Hydrating Eye Gel", category: "Cleansers", price: 395, useIcon: true },
-
-  { brand: "Nivea", name: "Nivea Soft Moisturizing Cream", category: "Cleansers", price: 175, useIcon: true },
-  { brand: "Nivea", name: "Nivea Men Face Wash", category: "Moisturizers", price: 220, useIcon: true },
-  { brand: "Nivea", name: "Nivea Body Milk Lotion", category: "Masks", price: 150, useIcon: true },
-  { brand: "Nivea", name: "Nivea Lip Balm Original", category: "Bodycare", price: 150, useIcon: true },
-  { brand: "Nivea", name: "Nivea Whitening Roll-On Deodorant", category: "Skincare", price: 120, useIcon: true },
-
-  { brand: "Mamaearth", name: "Onion Hair Oil", category: "Cleansers", price: 349, useIcon: true },
-  { brand: "Mamaearth", name: "Ubtan Face Wash", category: "Skincare", price: 549, useIcon: true },
-  { brand: "Mamaearth", name: "Vitamin C Face Serum", category: "Cleansers", price: 199, useIcon: true },
-  { brand: "Mamaearth", name: "Aloe Vera Gel", category: "Masks", price: 99, useIcon: true },
-  { brand: "Mamaearth", name: "Tea Tree Face Wash", category: "Makeup", price: 199, useIcon: true }
+  { brand: "Maybelline", name: "Fit Me Matte + Poreless Foundation", category: "Makeup", price: 599, useIcon: true, images: ["/pdf-products/product-01.jpg"] },
+  { brand: "Maybelline", name: "Sky High Mascara", category: "Makeup", price: 549, useIcon: true, images: ["/pdf-products/product-02.jpg"] },
+  { brand: "Maybelline", name: "SuperStay Matte Ink Liquid Lipstick", category: "Makeup", price: 199, useIcon: true, images: ["/pdf-products/product-03.jpg"] },
+  { brand: "Maybelline", name: "Instant Age Rewind Concealer", category: "Makeup", price: 699, useIcon: true, images: ["/pdf-products/product-04.jpg"] },
+  { brand: "Lakme", name: "9to5 Primer + Matte Foundation", category: "Makeup", price: 399, useIcon: true, images: ["/pdf-products/product-05.jpg"] },
+  { brand: "Lakme", name: "Eyeconic Kajal", category: "Makeup", price: 650, useIcon: true, images: ["/pdf-products/product-06.jpg"] },
+  { brand: "Lakme", name: "Absolute Matte Lipstick", category: "Makeup", price: 550, useIcon: true, images: ["/pdf-products/product-07.jpg"] },
+  { brand: "Lakme", name: "Sun Expert SPF 50 Sunscreen", category: "Makeup", price: 249, useIcon: true, images: ["/pdf-products/product-08.jpg"] },
+  { brand: "Lakme", name: "Blush & Glow Face Wash", category: "Makeup", price: 825, useIcon: true, images: ["/pdf-products/product-09.jpg"] },
+  { brand: "L'Oreal Paris", name: "Infallible 24H Fresh Wear Foundation", category: "Skincare", price: 499, useIcon: true, images: ["/pdf-products/product-10.jpg"] },
+  { brand: "L'Oreal Paris", name: "Lash Paradise Mascara", category: "Makeup", price: 699, useIcon: true, images: ["/pdf-products/product-11.jpg"] },
+  { brand: "L'Oreal Paris", name: "Revitalift Hyaluronic Acid Serum", category: "Makeup", price: 999, useIcon: true, images: ["/pdf-products/product-12.jpg"] },
+  { brand: "L'Oreal Paris", name: "Color Riche Satin Lipstick", category: "Makeup", price: 249, useIcon: true, images: ["/pdf-products/product-13.jpg"] },
+  { brand: "MAC", name: "Studio Fix Fluid SPF 15 Foundation", category: "Makeup", price: 799, useIcon: true, images: ["/pdf-products/product-14.jpg"] },
+  { brand: "MAC", name: "Matte Lipstick Ruby Woo", category: "Makeup", price: 1199, useIcon: true, images: ["/pdf-products/product-15.jpg"] },
+  { brand: "MAC", name: "Prep + Prime Fix+ Setting Spray", category: "Cleansers", price: 349, useIcon: true, images: ["/pdf-products/product-16.jpg"] },
+  { brand: "MAC", name: "Powder Blush", category: "Skincare", price: 699, useIcon: true, images: ["/pdf-products/product-17.jpg"] },
+  { brand: "The Ordinary", name: "Niacinamide 10% + Zinc 1% Serum", category: "Cleansers", price: 349, useIcon: true, images: ["/pdf-products/product-18.jpg"] },
+  { brand: "The Ordinary", name: "Hyaluronic Acid 2% + B5", category: "Haircare", price: 449, useIcon: true, images: ["/pdf-products/product-19.jpg"] },
+  { brand: "Cetaphil", name: "Gentle Skin Cleanser", category: "Cleansers", price: 349, useIcon: true, images: ["/pdf-products/product-20.jpg"] },
+  { brand: "Cetaphil", name: "Moisturizing Cream", category: "Cleansers", price: 399, useIcon: true, images: ["/pdf-products/product-21.jpg"] },
+  { brand: "Cetaphil", name: "Daily Facial Cleanser", category: "Skincare", price: 299, useIcon: true, images: ["/pdf-products/product-22.jpg"] },
+  { brand: "Cetaphil", name: "Bright Healthy Radiance Serum", category: "Haircare", price: 499, useIcon: true, images: ["/pdf-products/product-23.jpg"] },
+  { brand: "Cetaphil", name: "Hydrating Eye Gel", category: "Haircare", price: 499, useIcon: true, images: ["/pdf-products/product-24.jpg"] },
+  { brand: "Mamaearth", name: "Onion Hair Oil", category: "Skincare", price: 549, useIcon: true, images: ["/pdf-products/product-25.jpg"] },
+  { brand: "Mamaearth", name: "Ubtan Face Wash", category: "Skincare", price: 599, useIcon: true, images: ["/pdf-products/product-26.jpg"] },
+  { brand: "Mamaearth", name: "Vitamin C Face Serum", category: "Cleansers", price: 299, useIcon: true, images: ["/pdf-products/product-27.jpg"] },
+  { brand: "Mamaearth", name: "Tea Tree Face Wash", category: "Skincare", price: 599, useIcon: true, images: ["/pdf-products/product-28.jpg"] }
 ];
 
 function uniq(items) {
@@ -573,8 +542,8 @@ export const mockReviews = [
     ageGroup: "25-34",
     verifiedPurchase: true,
     helpfulCount: 81,
-    beforeImage: "/skinmatch-product.png",
-    afterImage: "/skinmatch-product.png",
+    beforeImage: "/pdf-products/product-01.jpg",
+    afterImage: "/pdf-products/product-01.jpg",
     createdAt: "2026-03-02T10:20:00.000Z"
   },
   {
@@ -588,8 +557,8 @@ export const mockReviews = [
     ageGroup: "25-34",
     verifiedPurchase: true,
     helpfulCount: 64,
-    beforeImage: "/skinmatch-product.png",
-    afterImage: "/skinmatch-product.png",
+    beforeImage: "/pdf-products/product-01.jpg",
+    afterImage: "/pdf-products/product-01.jpg",
     createdAt: "2026-03-04T08:44:00.000Z"
   },
   {
