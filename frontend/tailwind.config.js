@@ -9,14 +9,14 @@ export default {
       },
       colors: {
         skin: {
-          rose: "#E85B8D",
-          blush: "#FFDCE8",
+          rose: "#E9337B",
+          blush: "#FFD0E2",
           beige: "#EFDCCA",
           cream: "#FFF8F2",
-          peach: "#FFD2B5",
+          peach: "#FFC4A6",
           gold: "#C8A96B",
           ivory: "#FFFCF8",
-          ink: "#2E1E28"
+          ink: "#2B1B26"
         }
       },
       boxShadow: {
@@ -25,8 +25,8 @@ export default {
         card: "0 18px 38px rgba(46, 30, 40, 0.12)"
       },
       backgroundImage: {
-        "skin-gradient": "linear-gradient(135deg, #FFF7F3 0%, #FFEAF3 45%, #FFF3E8 100%)",
-        "skin-hero": "radial-gradient(circle at 20% 0%, rgba(255, 200, 224, 0.6), transparent 35%), radial-gradient(circle at 90% 10%, rgba(255, 218, 180, 0.45), transparent 40%), linear-gradient(135deg, #fffaf7 0%, #fff1f6 55%, #ffefe2 100%)",
+        "skin-gradient": "linear-gradient(135deg, #FFE7F2 0%, #FFD2E6 36%, #FFE2C7 72%, #F3ECFF 100%)",
+        "skin-hero": "radial-gradient(circle at 18% 0%, rgba(255, 118, 170, 0.65), transparent 38%), radial-gradient(circle at 90% 14%, rgba(255, 182, 110, 0.6), transparent 45%), linear-gradient(135deg, #fff0f7 0%, #ffd8ea 52%, #ffe7cf 100%)",
         "gold-sheen": "linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(200,169,107,0.22) 45%, rgba(255,255,255,0) 100%)"
       },
       keyframes: {
