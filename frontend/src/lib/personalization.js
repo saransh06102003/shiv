@@ -7,7 +7,11 @@ const SEARCH_SYNONYMS = {
   salicylic: ["bha", "salicylic acid"],
   acne: ["breakout", "blemish"],
   oily: ["oil control", "sebum"],
-  sunscreen: ["spf", "sun protection"]
+  sunscreen: ["spf", "sun protection"],
+  skincare: ["serum", "serums", "cleanser", "cleansers", "moisturizer", "moisturizers", "sunscreen"],
+  dry: ["dehydrated", "tight", "flaky"],
+  sensitive: ["redness", "irritation"],
+  combination: ["combo"]
 };
 
 function unique(values) {
@@ -21,6 +25,229 @@ function tokenize(text) {
     .split(/\s+/)
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+const SKIN_TYPE_TOKENS = {
+  Oily: ["oily", "oil", "sebum", "shine"],
+  Dry: ["dry", "dehydrated", "tight", "flaky"],
+  Combination: ["combination", "combo", "t-zone"],
+  Sensitive: ["sensitive", "redness", "irritation"],
+  "Acne-Prone": ["acne", "breakout", "blemish"],
+  Normal: ["normal", "balanced"]
+};
+
+const SKIN_TYPE_CONCERNS = {
+  Oily: ["Oil control", "Pores", "Acne"],
+  Dry: ["Hydration", "Barrier", "Dullness"],
+  Combination: ["Oil control", "Hydration", "Texture"],
+  Sensitive: ["Soothing", "Redness", "Barrier"],
+  "Acne-Prone": ["Acne", "Pores", "Texture"],
+  Normal: ["Glow", "Radiance", "Hydration"]
+};
+
+const SKIN_TYPE_INGREDIENTS = {
+  Oily: ["Niacinamide", "Salicylic Acid", "BHA", "Green Tea"],
+  Dry: ["Hyaluronic Acid", "Ceramides", "Squalane", "Glycerin"],
+  Combination: ["Niacinamide", "Hyaluronic Acid", "Ceramides"],
+  Sensitive: ["Centella", "Aloe", "Ceramides", "Panthenol"],
+  "Acne-Prone": ["Salicylic Acid", "BHA", "Retinol", "Niacinamide"],
+  Normal: ["Vitamin C", "Hyaluronic Acid", "Ceramides"]
+};
+
+const AVOID_INGREDIENTS = {
+  Oily: ["Heavy oils", "Mineral oil"],
+  Dry: ["Strong acids", "High alcohol"],
+  Combination: ["Heavy oils", "Strong acids"],
+  Sensitive: ["Fragrance", "Alcohol", "Strong acids"],
+  "Acne-Prone": ["Comedogenic oils", "Heavy oils"],
+  Normal: []
+};
+
+export function normalizeSkinType(value) {
+  if (!value) return "";
+  const cleaned = String(value).toLowerCase();
+  if (cleaned.includes("acne")) return "Acne-Prone";
+  if (cleaned.includes("dry")) return "Dry";
+  if (cleaned.includes("oily")) return "Oily";
+  if (cleaned.includes("comb")) return "Combination";
+  if (cleaned.includes("sens")) return "Sensitive";
+  return "Normal";
+}
+
+export function formatSkinType(value) {
+  if (!value) return "Normal Skin";
+  const normalized = normalizeSkinType(value);
+  if (normalized === "Acne-Prone") return "Acne-Prone Skin";
+  return `${normalized} Skin`;
+}
+
+export function inferSkinTypeFromAnswers(answers = {}) {
+  let score = {
+    Oily: 0,
+    Dry: 0,
+    Combination: 0,
+    Sensitive: 0,
+    "Acne-Prone": 0,
+    Normal: 0
+  };
+
+  const feel = answers.afterWash;
+  if (feel === "Tight / Dry") score.Dry += 3;
+  if (feel === "Comfortable") score.Normal += 2;
+  if (feel === "Slightly oily") score.Combination += 2;
+  if (feel === "Very oily") score.Oily += 3;
+
+  const breakouts = answers.breakouts;
+  if (breakouts === "Very often") score["Acne-Prone"] += 3;
+  if (breakouts === "Sometimes") score["Acne-Prone"] += 2;
+  if (breakouts === "Rarely") score.Normal += 1;
+
+  const pores = answers.pores;
+  if (pores === "Very visible") score.Oily += 2;
+  if (pores === "Moderately visible") score.Combination += 1;
+
+  const reaction = answers.reaction;
+  if (reaction === "Sensitive / redness") score.Sensitive += 3;
+  if (reaction === "Slight irritation sometimes") score.Sensitive += 1;
+  if (reaction === "No reaction") score.Normal += 1;
+
+  const midday = answers.midday;
+  if (midday === "Very oily") score.Oily += 3;
+  if (midday === "Slightly shiny") score.Combination += 2;
+  if (midday === "Normal") score.Normal += 2;
+  if (midday === "Dry patches") score.Dry += 2;
+
+  const entries = Object.entries(score).sort((a, b) => b[1] - a[1]);
+  const [topType, topScore] = entries[0];
+  if (topScore === 0) return "Normal Skin";
+  return formatSkinType(topType);
+}
+
+export function extractSearchIntent(query) {
+  const tokens = tokenize(query);
+  const intent = {
+    skinTypes: [],
+    concerns: []
+  };
+
+  Object.entries(SKIN_TYPE_TOKENS).forEach(([type, keywords]) => {
+    if (keywords.some((keyword) => tokens.includes(keyword))) {
+      intent.skinTypes.push(type);
+      if (type === "Acne-Prone") intent.concerns.push("Acne");
+    }
+  });
+
+  if (tokens.includes("acne")) intent.concerns.push("Acne");
+  if (tokens.includes("brightening")) intent.concerns.push("Brightening");
+  if (tokens.includes("hydration") || tokens.includes("hydrating")) intent.concerns.push("Hydration");
+
+  return intent;
+}
+
+export function getBeautyMatchScore(product, skinType, skinConcerns = []) {
+  if (!product) return 0;
+  const normalized = normalizeSkinType(skinType);
+  let score = 50;
+
+  if (normalized && (product.skinTypes || []).includes(normalized)) score += 22;
+
+  const concernMatches = (skinConcerns || []).filter((concern) =>
+    (product.concerns || []).includes(concern)
+  );
+  score += concernMatches.length * 8;
+
+  const targetConcerns = SKIN_TYPE_CONCERNS[normalized] || [];
+  if (targetConcerns.some((concern) => (product.concerns || []).includes(concern))) score += 10;
+
+  const targetIngredients = SKIN_TYPE_INGREDIENTS[normalized] || [];
+  if (targetIngredients.some((ingredient) => (product.includeIngredients || []).includes(ingredient))) score += 8;
+
+  if (product.isBestSeller) score += 4;
+  if (product.isNew) score += 2;
+
+  return Math.max(32, Math.min(98, score));
+}
+
+export function getGlowScore(product) {
+  if (!product) return 0;
+  const base = product.rating || 0;
+  const reviewBoost = Math.min(0.6, Math.log10((product.reviews || 1) + 1) / 4);
+  const score = Math.min(5, base + reviewBoost);
+  return Number(score.toFixed(1));
+}
+
+export function getBenefitTag(product) {
+  const tags = [
+    ...(product.compatibilityTags || []),
+    ...(product.concerns || []),
+    ...(product.includeIngredients || [])
+  ];
+  const priority = [
+    "Oil Control",
+    "Hydrating",
+    "Acne Safe",
+    "Dermat Approved",
+    "Brightening",
+    "Barrier",
+    "Sun protection",
+    "Texture"
+  ];
+  const found = priority.find((label) =>
+    tags.some((tag) => String(tag).toLowerCase().includes(label.toLowerCase()))
+  );
+  return found || "Glow Boost";
+}
+
+export function filterProductsForSkinType(products, skinType, skinConcerns = []) {
+  const normalized = normalizeSkinType(skinType);
+  if (!normalized) return products;
+  const targetConcerns = SKIN_TYPE_CONCERNS[normalized] || [];
+  return products.filter((product) => {
+    const skinMatch = (product.skinTypes || []).includes(normalized);
+    const concernMatch =
+      skinConcerns.length === 0
+        ? targetConcerns.some((concern) => (product.concerns || []).includes(concern))
+        : skinConcerns.some((concern) => (product.concerns || []).includes(concern));
+    return skinMatch || concernMatch;
+  });
+}
+
+export function buildRoutine(products, skinType) {
+  const normalized = normalizeSkinType(skinType);
+  const pick = (step, categoryFallbacks) =>
+    products.find(
+      (product) =>
+        product.routineStep === step ||
+        (categoryFallbacks || []).includes(product.category)
+    );
+
+  const cleanser = pick("Cleanse", ["Cleansers"]);
+  const toner = pick("Treat", ["Treatments"]);
+  const serum = pick("Treat", ["Serums"]);
+  const moisturizer = pick("Moisturize", ["Moisturizers"]);
+  const sunscreen = pick("Protect", ["Sunscreen"]);
+  const nightTreatment = normalized === "Dry" ? pick("Treat", ["Masks"]) : pick("Treat", ["Serums"]);
+
+  return {
+    morning: [
+      { label: "Cleanser", product: cleanser },
+      { label: "Toner", product: toner },
+      { label: "Serum", product: serum },
+      { label: "Moisturizer", product: moisturizer },
+      { label: "Sunscreen", product: sunscreen }
+    ],
+    night: [
+      { label: "Cleanser", product: cleanser },
+      { label: "Treatment Serum", product: serum },
+      { label: "Moisturizer", product: moisturizer },
+      { label: "Sleeping Mask", product: nightTreatment }
+    ]
+  };
+}
+
+export function getAvoidIngredients(skinType) {
+  const normalized = normalizeSkinType(skinType);
+  return AVOID_INGREDIENTS[normalized] || [];
 }
 
 export function expandSearchTerms(query) {
@@ -105,7 +332,16 @@ export function searchScoreForProduct(product, query) {
 }
 
 export function matchesProductSearch(product, query) {
-  return searchScoreForProduct(product, query) > 0;
+  const score = searchScoreForProduct(product, query);
+  if (score > 0) return true;
+  const intent = extractSearchIntent(query);
+  if (intent.skinTypes.length > 0) {
+    return intent.skinTypes.some((skin) => (product.skinTypes || []).includes(skin));
+  }
+  if (intent.concerns.length > 0) {
+    return intent.concerns.some((concern) => (product.concerns || []).includes(concern));
+  }
+  return false;
 }
 
 export function profileScoreForProduct(product, skinProfile) {

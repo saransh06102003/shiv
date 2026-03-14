@@ -4,23 +4,10 @@ import ProductCard from "../components/ProductCard";
 import ReviewCard from "../components/ReviewCard";
 import IngredientBadge from "../components/IngredientBadge";
 import SectionHeader from "../components/SectionHeader";
+import BrandLogo from "../components/BrandLogo";
+import { getAvoidIngredients, getBeautyMatchScore, getGlowScore, getBenefitTag } from "../lib/personalization";
+import PackagingShowcase from "../components/PackagingShowcase";
 import { fetchProductById, fetchReviews } from "../lib/api";
-
-function AccordionItem({ title, open, onToggle, children }) {
-  return (
-    <div className="overflow-hidden rounded-2xl border border-rose-100 bg-white">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="flex w-full items-center justify-between px-4 py-3 text-left"
-      >
-        <span className="text-sm font-semibold text-skin-ink">{title}</span>
-        <span className="text-rose-600">{open ? "−" : "+"}</span>
-      </button>
-      {open ? <div className="border-t border-rose-100 px-4 py-3 text-sm text-rose-900/75">{children}</div> : null}
-    </div>
-  );
-}
 
 function getIngredientBadges(product) {
   const loweredIngredients = (product.includeIngredients || []).map((item) => item.toLowerCase());
@@ -76,7 +63,7 @@ function ProductPage({
   const [liveReviews, setLiveReviews] = useState(() => reviews.filter((review) => review.productId === productId));
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [loadingReviews, setLoadingReviews] = useState(false);
-  const [openSection, setOpenSection] = useState("key");
+  const [activeTab, setActiveTab] = useState("description");
   const [quantity, setQuantity] = useState(1);
   const [reviewFilters, setReviewFilters] = useState({
     skinType: "All",
@@ -193,17 +180,26 @@ function ProductPage({
     (sum, item) => sum + Math.round(item.price * (1 - item.discountPct / 100)),
     0
   );
+  const matchScore = getBeautyMatchScore(product, skinProfile?.skinType, skinProfile?.skinConcerns);
+  const glowScore = getGlowScore(product);
+  const benefitTag = getBenefitTag(product);
+  const avoidIngredients = getAvoidIngredients(skinProfile?.skinType);
+  const whyThisWorks = product.includeIngredients
+    .slice(0, 2)
+    .map((ingredient) => `${ingredient} helps ${product.concerns?.[0] || "support your skin"} for ${skinProfile?.skinType || "all skin"} types.`)
+    .join(" ");
 
   return (
     <div className="space-y-5 pb-20 md:pb-8">
-      <section className="glass-card p-4 md:p-6">
+      <section id="reviews" className="glass-card p-4 md:p-6">
         <div className="grid gap-6 lg:grid-cols-12">
           <div className="space-y-3 lg:col-span-7">
             <div className="group overflow-hidden rounded-[22px] border border-rose-100 bg-white p-5">
+              <div className="product-spotlight" />
               <img
                 src={product.images[selectedImageIndex]}
                 alt={product.name}
-                className="h-96 w-full cursor-zoom-in object-contain transition duration-500 group-hover:scale-110"
+                className="product-image h-96 w-full cursor-zoom-in object-contain transition duration-500 group-hover:scale-110"
                 loading="eager"
                 decoding="async"
               />
@@ -218,7 +214,11 @@ function ProductPage({
                     index === selectedImageIndex ? "border-skin-gold" : "border-rose-100"
                   }`}
                 >
-                  <img src={image} alt={`${product.name} view ${index + 1}`} className="h-16 w-full object-contain" />
+                  <img
+                    src={image}
+                    alt={`${product.name} view ${index + 1}`}
+                    className="product-image h-16 w-full object-contain"
+                  />
                 </button>
               ))}
             </div>
@@ -226,12 +226,21 @@ function ProductPage({
 
           <div className="space-y-4 lg:col-span-5">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-skin-gold">{product.brand}</p>
+              <BrandLogo brand={product.brand} showName className="brand-mark--hero" imgClassName="brand-mark__img--md" />
               <h1 className="mt-1 text-4xl font-bold leading-tight text-skin-ink">{product.name}</h1>
 
-              <div className="mt-3 flex items-center gap-3 text-sm text-rose-900/70">
+              <div className="mt-3 flex flex-wrap items-center gap-4 text-sm text-rose-900/70">
+                <div className="match-ring" style={{ background: `conic-gradient(#ff6f91 ${matchScore * 3.6}deg, rgba(255,255,255,0.4) 0deg)` }}>
+                  <div className="match-ring__inner">
+                    <span>{matchScore}%</span>
+                    <small>Match</small>
+                  </div>
+                </div>
                 <span className="font-semibold text-rose-700">★ {product.rating}</span>
                 <span>{product.reviews} reviews</span>
+                <span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">
+                  Glow Score {glowScore} / 5
+                </span>
               </div>
               <p className="mt-3 text-sm text-rose-900/70">{product.description}</p>
             </div>
@@ -306,62 +315,113 @@ function ProductPage({
         </div>
       </section>
 
-      <section className="space-y-2">
-        <AccordionItem
-          title="Key Ingredients"
-          open={openSection === "key"}
-          onToggle={() => setOpenSection((prev) => (prev === "key" ? "" : "key"))}
-        >
-          <div className="flex flex-wrap gap-2">
-            {product.includeIngredients.map((ingredient) => (
-              <span key={ingredient} className="rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700">
-                {ingredient}
-              </span>
-            ))}
-          </div>
-        </AccordionItem>
+      <div className="texture-strip my-4 md:my-6" aria-hidden="true" />
 
-        <AccordionItem
-          title="Ingredient Breakdown"
-          open={openSection === "breakdown"}
-          onToggle={() => setOpenSection((prev) => (prev === "breakdown" ? "" : "breakdown"))}
-        >
-          <div className="grid gap-3 md:grid-cols-2">
-            {ingredientBreakdown.map((ingredient) => (
-              <article key={ingredient.name} className="rounded-2xl border border-rose-100 bg-rose-50/40 p-3">
-                <h4 className="text-sm font-semibold text-skin-ink">{ingredient.name}</h4>
-                <p className="mt-1 text-xs text-rose-900/70">{ingredient.summary}</p>
-                {ingredient.suitableSkinTypes.length > 0 ? (
-                  <p className="mt-2 text-[11px] font-medium text-rose-700">
-                    Suitable: {ingredient.suitableSkinTypes.join(", ")}
-                  </p>
-                ) : null}
-              </article>
-            ))}
-          </div>
-        </AccordionItem>
+      <section className="product-tabs">
+        <div className="product-tabs__header">
+          {[
+            { id: "description", label: "Description" },
+            { id: "ingredients", label: "Ingredients" },
+            { id: "howto", label: "How to Use" },
+            { id: "reviews", label: "Reviews" }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`product-tabs__btn ${activeTab === tab.id ? "is-active" : ""}`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-        <AccordionItem
-          title="How To Use"
-          open={openSection === "howto"}
-          onToggle={() => setOpenSection((prev) => (prev === "howto" ? "" : "howto"))}
-        >
-          <ol className="list-decimal space-y-1 pl-4">
-            <li>Cleanse skin and pat dry.</li>
-            <li>Apply treatment product on targeted areas.</li>
-            <li>Follow with moisturizer to lock hydration.</li>
-            <li>Use sunscreen in your morning routine.</li>
-          </ol>
-        </AccordionItem>
+        <div className="product-tabs__panel">
+          {activeTab === "description" ? (
+            <div className="space-y-3">
+              <p className="text-sm text-rose-900/75">{product.description}</p>
+              <div className="why-it-works">
+                <p className="why-it-works__title">✨ Why This Works For Your Skin</p>
+                <p className="text-sm text-rose-900/70">{whyThisWorks}</p>
+                {benefitTag ? <span className="why-it-works__tag">{benefitTag}</span> : null}
+              </div>
+            </div>
+          ) : null}
 
-        <AccordionItem
-          title="Product Description"
-          open={openSection === "description"}
-          onToggle={() => setOpenSection((prev) => (prev === "description" ? "" : "description"))}
-        >
-          {product.description}
-        </AccordionItem>
+          {activeTab === "ingredients" ? (
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-700/70">Key Ingredients</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {product.includeIngredients.map((ingredient) => (
+                    <span key={ingredient} className="rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700">
+                      {ingredient}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-700/70">Ingredient Intelligence</p>
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  {ingredientBreakdown.map((ingredient) => (
+                    <article key={ingredient.name} className="ingredient-card">
+                      <h4 className="text-sm font-semibold text-skin-ink">{ingredient.name}</h4>
+                      <p className="mt-1 text-xs text-rose-900/70">{ingredient.summary}</p>
+                      {ingredient.suitableSkinTypes.length > 0 ? (
+                        <p className="mt-2 text-[11px] font-medium text-rose-700">
+                          Suitable: {ingredient.suitableSkinTypes.join(", ")}
+                        </p>
+                      ) : null}
+                    </article>
+                  ))}
+                </div>
+              </div>
+              <div className="ingredient-alerts">
+                <span>Dermatologist Recommended</span>
+                <span>Acne Safe</span>
+                <span>Hydrating</span>
+                <span>Oil Control</span>
+              </div>
+              {avoidIngredients.length > 0 ? (
+                <p className="ingredient-avoid">⚠ Avoid: {avoidIngredients.join(", ")}</p>
+              ) : null}
+            </div>
+          ) : null}
+
+          {activeTab === "howto" ? (
+            <ol className="list-decimal space-y-2 pl-4 text-sm text-rose-900/70">
+              <li>Cleanse skin and pat dry.</li>
+              <li>Apply treatment product on targeted areas.</li>
+              <li>Follow with moisturizer to lock hydration.</li>
+              <li>Use sunscreen in your morning routine.</li>
+            </ol>
+          ) : null}
+
+          {activeTab === "reviews" ? (
+            <div className="space-y-3">
+              <p className="text-sm text-rose-900/70">See what real customers with similar profiles are saying.</p>
+              <div className="grid gap-3 md:grid-cols-2">
+                {productReviews.slice(0, 2).map((review) => (
+                  <ReviewCard key={review.id} review={review} />
+                ))}
+              </div>
+              <button type="button" className="btn-secondary" onClick={() => document.getElementById("reviews")?.scrollIntoView({ behavior: "smooth" })}>
+                View all reviews
+              </button>
+            </div>
+          ) : null}
+        </div>
       </section>
+
+      <div className="texture-strip my-4 md:my-6" aria-hidden="true" />
+
+      <PackagingShowcase
+        title="Our Signature Packaging"
+        subtitle="Magnetic gift boxes, silk wrapping, and a handwritten beauty card for every order."
+        variant="compact"
+      />
+
+      <div className="texture-strip my-4 md:my-6" aria-hidden="true" />
 
       <section className="glass-card p-4 md:p-6">
         <SectionHeader title="Customer Reviews" subtitle="Filter by profile tags to see relevant feedback." />
@@ -446,6 +506,8 @@ function ProductPage({
         </div>
       </section>
 
+      <div className="texture-strip my-4 md:my-6" aria-hidden="true" />
+
       <section className="glass-card p-4 md:p-6">
         <SectionHeader title="Frequently Bought Together" subtitle="Save time with this curated bundle." />
 
@@ -467,7 +529,7 @@ function ProductPage({
                   />
                   <img src={item.images[0]} alt={item.name} className="h-14 w-14 rounded-xl object-cover" />
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-600">{item.brand}</p>
+                    <BrandLogo brand={item.brand} showName className="brand-mark--card" imgClassName="brand-mark__img--sm" />
                     <p className="text-sm font-semibold text-skin-ink">{item.name}</p>
                     <p className="text-xs text-rose-900/70">
                       Rs {Math.round(item.price * (1 - item.discountPct / 100))}
@@ -491,6 +553,8 @@ function ProductPage({
           </button>
         </div>
       </section>
+
+      <div className="texture-strip my-4 md:my-6" aria-hidden="true" />
 
       <section className="glass-card p-4 md:p-6">
         <SectionHeader title="Recommended Products" subtitle="Handpicked to pair with your routine." />

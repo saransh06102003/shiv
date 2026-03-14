@@ -25,7 +25,7 @@ function HorizontalScroller({
         </Link>
       </div>
 
-      <div className="grid grid-flow-col auto-cols-[minmax(220px,1fr)] gap-4 overflow-x-auto pb-1 scrollbar-hidden md:auto-cols-[minmax(240px,1fr)]">
+      <div className="grid grid-flow-col auto-cols-[minmax(240px,1fr)] gap-4 overflow-x-auto pb-1 scrollbar-hidden md:auto-cols-[minmax(270px,1fr)]">
         {isLoading
           ? Array.from({ length: skeletonCount }).map((_, index) => (
               <div key={`skeleton-${index}`} className="skeleton-card animate-pulse space-y-4">

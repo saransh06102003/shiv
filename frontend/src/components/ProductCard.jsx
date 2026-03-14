@@ -1,11 +1,24 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { prefetchProductById } from "../lib/api";
+import BrandLogo from "./BrandLogo";
 
-function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted = false }) {
+function ProductCard({
+  product,
+  onAddToCart,
+  onToggleWishlist,
+  onQuickView,
+  isWishlisted = false,
+  matchScore,
+  glowScore,
+  benefitTag
+}) {
   const discountedPrice = Math.round(product.price * (1 - product.discountPct / 100));
   const [added, setAdded] = useState(false);
   const [wishlistPulse, setWishlistPulse] = useState(false);
+  const highlightTag = (product.tags || []).find((tag) =>
+    /editor|dermatologist|acne|glow|favorites/i.test(tag)
+  );
 
   useEffect(() => {
     if (!added) return undefined;
@@ -29,9 +42,11 @@ function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted = fa
     setWishlistPulse(true);
   };
 
+  const isRecommended = typeof matchScore === "number" && matchScore >= 85;
+
   return (
-    <article className="product-card group">
-      <div className="absolute left-3 top-3 z-10 flex items-center gap-2">
+    <article className={`product-card group ${isRecommended ? "product-card--recommended" : ""}`}>
+      <div className="absolute left-3 top-3 z-10 flex flex-wrap items-center gap-2">
         {product.isBestSeller ? (
           <span className="rounded-full bg-rose-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
             Best Seller
@@ -42,29 +57,44 @@ function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted = fa
             New
           </span>
         ) : null}
+        {highlightTag ? (
+          <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-amber-700">
+            {highlightTag}
+          </span>
+        ) : null}
+        {typeof matchScore === "number" ? (
+          <span className="rounded-full border border-rose-200 bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-rose-700">
+            {matchScore}% match
+          </span>
+        ) : null}
       </div>
 
-      <button
-        type="button"
-        aria-label="Add to wishlist"
-        onClick={handleWishlist}
-        className={`absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-rose-200 bg-white/95 text-base text-rose-700 backdrop-blur transition ${
-          wishlistPulse ? "animate-heart-pop" : ""
-        }`}
-      >
-        {isWishlisted ? "♥" : "♡"}
-      </button>
-
-      <button
-        type="button"
-        aria-label="Quick add to cart"
-        onClick={handleQuickAdd}
-        className={`absolute right-3 top-14 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-200 bg-white text-lg text-rose-700 shadow-sm transition ${
-          added ? "ring-2 ring-rose-200" : ""
-        } opacity-0 translate-y-1 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto`}
-      >
-        +
-      </button>
+      <div className="product-actions">
+        <button
+          type="button"
+          aria-label="Add to wishlist"
+          onClick={handleWishlist}
+          className={`product-action-btn ${wishlistPulse ? "animate-heart-pop" : ""}`}
+        >
+          {isWishlisted ? "♥" : "♡"}
+        </button>
+        <button
+          type="button"
+          aria-label="Quick view"
+          onClick={() => onQuickView?.(product)}
+          className="product-action-btn"
+        >
+          👁
+        </button>
+        <button
+          type="button"
+          aria-label="Quick add to cart"
+          onClick={handleQuickAdd}
+          className={`product-action-btn ${added ? "ring-2 ring-rose-200" : ""}`}
+        >
+          🛒
+        </button>
+      </div>
 
       <Link
         to={`/product/${product.id}`}
@@ -72,14 +102,26 @@ function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted = fa
         onTouchStart={() => prefetchProductById(product.id)}
         className="block"
       >
-        <div className="relative aspect-[4/5] overflow-hidden bg-white p-4">
+        <div className="relative aspect-[3/4] overflow-hidden bg-white p-5">
+          <div className="product-spotlight" />
           <img
             src={product.images[0]}
             alt={product.name}
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-contain transition duration-300 group-hover:scale-105"
+            className="product-image h-full w-full object-contain transition duration-300 group-hover:scale-105"
           />
+          {typeof matchScore === "number" ? (
+            <div
+              className="match-ring match-ring--sm"
+              style={{ background: `conic-gradient(#ff6f91 ${matchScore * 3.6}deg, rgba(255,255,255,0.4) 0deg)` }}
+            >
+              <div className="match-ring__inner">
+                <span>{matchScore}%</span>
+                <small>Match</small>
+              </div>
+            </div>
+          ) : null}
           <div className="absolute bottom-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-rose-700">
             {product.discountPct}% OFF
           </div>
@@ -88,15 +130,28 @@ function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted = fa
 
       <div className="space-y-3 p-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-rose-800/70">{product.brand}</p>
-          <Link to={`/product/${product.id}`} className="mt-1 line-clamp-2 block text-sm font-semibold text-skin-ink">
+          <BrandLogo brand={product.brand} showName className="brand-mark--card" imgClassName="brand-mark__img--sm" />
+          <Link
+            to={`/product/${product.id}`}
+            className="mt-1 block min-h-[2.6rem] line-clamp-2 text-sm font-semibold leading-snug text-skin-ink"
+          >
             {product.name}
           </Link>
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-rose-800/55">
+            <span>{product.category}</span>
+            <span>·</span>
+            <span>{product.routineStep}</span>
+            {benefitTag ? <span className="product-benefit-tag">{benefitTag}</span> : null}
+          </div>
         </div>
 
         <div className="flex items-center justify-between text-sm">
           <span className="font-medium text-rose-700">★ {product.rating}</span>
-          <span className="text-xs text-rose-900/60">{product.reviews} reviews</span>
+          {typeof glowScore === "number" ? (
+            <span className="text-xs text-rose-900/60">Glow {glowScore} / 5</span>
+          ) : (
+            <span className="text-xs text-rose-900/60">{product.reviews} reviews</span>
+          )}
         </div>
 
         <div className="flex items-end gap-2">
@@ -109,7 +164,7 @@ function ProductCard({ product, onAddToCart, onToggleWishlist, isWishlisted = fa
           onClick={handleQuickAdd}
           className={`btn-primary w-full transition ${added ? "ring-2 ring-skin-gold/50" : ""}`}
         >
-          {added ? "Added ✓" : "Quick Add"}
+          {added ? "Added ✓" : "Add to Bag"}
         </button>
       </div>
     </article>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import SectionHeader from "../components/SectionHeader";
+import BrandLogo from "../components/BrandLogo";
 
 const PRIORITY_INGREDIENTS = [
   "Niacinamide",
@@ -353,7 +354,7 @@ function IngredientExplorerPage({ ingredients, products }) {
                         decoding="async"
                       />
                       <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-rose-600">{product.brand}</p>
+                        <BrandLogo brand={product.brand} showName className="brand-mark--card" imgClassName="brand-mark__img--xs" />
                         <p className="line-clamp-1 text-sm font-semibold text-skin-ink">{product.name}</p>
                         <p className="mt-1 text-xs font-medium text-rose-700">View Product →</p>
                       </div>
@@ -391,7 +392,7 @@ function IngredientExplorerPage({ ingredients, products }) {
                 />
               </div>
               <div className="space-y-2 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-rose-700/75">{product.brand}</p>
+                <BrandLogo brand={product.brand} showName className="brand-mark--card" imgClassName="brand-mark__img--xs" />
                 <h3 className="line-clamp-2 text-sm font-semibold text-skin-ink">{product.name}</h3>
                 <p className="text-xs text-rose-900/70">★ {product.rating} • {product.reviews} reviews</p>
                 <span className="inline-flex rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700">

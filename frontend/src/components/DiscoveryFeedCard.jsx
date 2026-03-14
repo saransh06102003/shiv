@@ -24,13 +24,13 @@ function DiscoveryFeedCard({ item }) {
 
   return (
     <article className="group overflow-hidden rounded-[22px] border border-rose-100 bg-white shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-card">
-      <div className="relative h-52 overflow-hidden bg-skin-hero sm:h-60">
+      <div className="relative flex h-52 items-center justify-center overflow-hidden bg-skin-hero p-4 sm:h-60">
         <img
           src={item.image}
           alt={item.title}
           loading="lazy"
           decoding="async"
-          className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.04]"
+          className="product-image h-full w-full object-contain transition duration-500 group-hover:scale-[1.04]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/0 to-black/5" />
         <div className="absolute left-4 top-4">

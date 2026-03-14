@@ -1,28 +1,39 @@
 import fs from "fs";
 
 const categoryImagePool = {
+  Makeup: [
+    "/pdf-products/product-14.jpg",
+    "/pdf-products/product-15.jpg",
+    "/pdf-products/product-03.jpg",
+    "/pdf-products/product-06.jpg"
+  ],
   Cleansers: [
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg"
+    "/pdf-products/product-20.jpg",
+    "/pdf-products/product-22.jpg",
+    "/pdf-products/product-26.jpg",
+    "/pdf-products/product-28.jpg"
   ],
   Serums: [
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg"
+    "/pdf-products/product-18.jpg",
+    "/pdf-products/product-19.jpg",
+    "/pdf-products/product-23.jpg",
+    "/pdf-products/product-27.jpg"
   ],
   Moisturizers: [
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg"
+    "/pdf-products/product-21.jpg",
+    "/pdf-products/product-24.jpg",
+    "/pdf-products/product-21.jpg",
+    "/pdf-products/product-24.jpg"
   ],
   Sunscreen: [
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg",
-    "/pdf-products/product-01.jpg"
+    "/pdf-products/product-08.jpg",
+    "/pdf-products/product-08.jpg",
+    "/pdf-products/product-08.jpg"
+  ],
+  Haircare: [
+    "/pdf-products/product-25.jpg",
+    "/pdf-products/product-25.jpg",
+    "/pdf-products/product-25.jpg"
   ],
   Treatments: [
     "/pdf-products/product-01.jpg",
@@ -228,27 +239,27 @@ const defaultProductSeeds = [
   { brand: "Lakme", name: "9to5 Primer + Matte Foundation", category: "Makeup", price: 399, useIcon: true, images: ["/pdf-products/product-05.jpg"] },
   { brand: "Lakme", name: "Eyeconic Kajal", category: "Makeup", price: 650, useIcon: true, images: ["/pdf-products/product-06.jpg"] },
   { brand: "Lakme", name: "Absolute Matte Lipstick", category: "Makeup", price: 550, useIcon: true, images: ["/pdf-products/product-07.jpg"] },
-  { brand: "Lakme", name: "Sun Expert SPF 50 Sunscreen", category: "Makeup", price: 249, useIcon: true, images: ["/pdf-products/product-08.jpg"] },
-  { brand: "Lakme", name: "Blush & Glow Face Wash", category: "Makeup", price: 825, useIcon: true, images: ["/pdf-products/product-09.jpg"] },
-  { brand: "L'Oreal Paris", name: "Infallible 24H Fresh Wear Foundation", category: "Skincare", price: 499, useIcon: true, images: ["/pdf-products/product-10.jpg"] },
+  { brand: "Lakme", name: "Sun Expert SPF 50 Sunscreen", category: "Sunscreen", price: 249, useIcon: true, images: ["/pdf-products/product-08.jpg"] },
+  { brand: "Lakme", name: "Blush & Glow Face Wash", category: "Cleansers", price: 825, useIcon: true, images: ["/pdf-products/product-09.jpg"] },
+  { brand: "L'Oreal Paris", name: "Infallible 24H Fresh Wear Foundation", category: "Makeup", price: 499, useIcon: true, images: ["/pdf-products/product-10.jpg"] },
   { brand: "L'Oreal Paris", name: "Lash Paradise Mascara", category: "Makeup", price: 699, useIcon: true, images: ["/pdf-products/product-11.jpg"] },
-  { brand: "L'Oreal Paris", name: "Revitalift Hyaluronic Acid Serum", category: "Makeup", price: 999, useIcon: true, images: ["/pdf-products/product-12.jpg"] },
+  { brand: "L'Oreal Paris", name: "Revitalift Hyaluronic Acid Serum", category: "Serums", price: 999, useIcon: true, images: ["/pdf-products/product-12.jpg"] },
   { brand: "L'Oreal Paris", name: "Color Riche Satin Lipstick", category: "Makeup", price: 249, useIcon: true, images: ["/pdf-products/product-13.jpg"] },
   { brand: "MAC", name: "Studio Fix Fluid SPF 15 Foundation", category: "Makeup", price: 799, useIcon: true, images: ["/pdf-products/product-14.jpg"] },
   { brand: "MAC", name: "Matte Lipstick Ruby Woo", category: "Makeup", price: 1199, useIcon: true, images: ["/pdf-products/product-15.jpg"] },
-  { brand: "MAC", name: "Prep + Prime Fix+ Setting Spray", category: "Cleansers", price: 349, useIcon: true, images: ["/pdf-products/product-16.jpg"] },
-  { brand: "MAC", name: "Powder Blush", category: "Skincare", price: 699, useIcon: true, images: ["/pdf-products/product-17.jpg"] },
-  { brand: "The Ordinary", name: "Niacinamide 10% + Zinc 1% Serum", category: "Cleansers", price: 349, useIcon: true, images: ["/pdf-products/product-18.jpg"] },
-  { brand: "The Ordinary", name: "Hyaluronic Acid 2% + B5", category: "Haircare", price: 449, useIcon: true, images: ["/pdf-products/product-19.jpg"] },
+  { brand: "MAC", name: "Prep + Prime Fix+ Setting Spray", category: "Makeup", price: 349, useIcon: true, images: ["/pdf-products/product-16.jpg"] },
+  { brand: "MAC", name: "Powder Blush", category: "Makeup", price: 699, useIcon: true, images: ["/pdf-products/product-17.jpg"] },
+  { brand: "The Ordinary", name: "Niacinamide 10% + Zinc 1% Serum", category: "Serums", price: 349, useIcon: true, images: ["/pdf-products/product-18.jpg"] },
+  { brand: "The Ordinary", name: "Hyaluronic Acid 2% + B5", category: "Serums", price: 449, useIcon: true, images: ["/pdf-products/product-19.jpg"] },
   { brand: "Cetaphil", name: "Gentle Skin Cleanser", category: "Cleansers", price: 349, useIcon: true, images: ["/pdf-products/product-20.jpg"] },
-  { brand: "Cetaphil", name: "Moisturizing Cream", category: "Cleansers", price: 399, useIcon: true, images: ["/pdf-products/product-21.jpg"] },
-  { brand: "Cetaphil", name: "Daily Facial Cleanser", category: "Skincare", price: 299, useIcon: true, images: ["/pdf-products/product-22.jpg"] },
-  { brand: "Cetaphil", name: "Bright Healthy Radiance Serum", category: "Haircare", price: 499, useIcon: true, images: ["/pdf-products/product-23.jpg"] },
-  { brand: "Cetaphil", name: "Hydrating Eye Gel", category: "Haircare", price: 499, useIcon: true, images: ["/pdf-products/product-24.jpg"] },
-  { brand: "Mamaearth", name: "Onion Hair Oil", category: "Skincare", price: 549, useIcon: true, images: ["/pdf-products/product-25.jpg"] },
-  { brand: "Mamaearth", name: "Ubtan Face Wash", category: "Skincare", price: 599, useIcon: true, images: ["/pdf-products/product-26.jpg"] },
-  { brand: "Mamaearth", name: "Vitamin C Face Serum", category: "Cleansers", price: 299, useIcon: true, images: ["/pdf-products/product-27.jpg"] },
-  { brand: "Mamaearth", name: "Tea Tree Face Wash", category: "Skincare", price: 599, useIcon: true, images: ["/pdf-products/product-28.jpg"] }
+  { brand: "Cetaphil", name: "Moisturizing Cream", category: "Moisturizers", price: 399, useIcon: true, images: ["/pdf-products/product-21.jpg"] },
+  { brand: "Cetaphil", name: "Daily Facial Cleanser", category: "Cleansers", price: 299, useIcon: true, images: ["/pdf-products/product-22.jpg"] },
+  { brand: "Cetaphil", name: "Bright Healthy Radiance Serum", category: "Serums", price: 499, useIcon: true, images: ["/pdf-products/product-23.jpg"] },
+  { brand: "Cetaphil", name: "Hydrating Eye Gel", category: "Moisturizers", price: 499, useIcon: true, images: ["/pdf-products/product-24.jpg"] },
+  { brand: "Mamaearth", name: "Onion Hair Oil", category: "Haircare", price: 549, useIcon: true, images: ["/pdf-products/product-25.jpg"] },
+  { brand: "Mamaearth", name: "Ubtan Face Wash", category: "Cleansers", price: 599, useIcon: true, images: ["/pdf-products/product-26.jpg"] },
+  { brand: "Mamaearth", name: "Vitamin C Face Serum", category: "Serums", price: 299, useIcon: true, images: ["/pdf-products/product-27.jpg"] },
+  { brand: "Mamaearth", name: "Tea Tree Face Wash", category: "Cleansers", price: 599, useIcon: true, images: ["/pdf-products/product-28.jpg"] }
 ];
 
 function uniq(items) {

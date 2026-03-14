@@ -1,41 +1,42 @@
 import { useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { searchScoreForProduct } from "../lib/personalization";
+import BrandLogo from "./BrandLogo";
 
 const NAV_CATEGORIES = [
   {
-    name: "Skincare",
-    subcategories: ["Cleanser", "Toner", "Serum", "Moisturizer", "Sunscreen", "Face Masks"]
+    name: "Makeup",
+    subcategories: ["Foundation", "Concealer", "Mascara", "Kajal", "Lipstick", "Setting Spray"]
   },
   {
-    name: "Makeup",
-    subcategories: ["Foundation", "Concealer", "Lipstick", "Kajal", "Mascara", "Eyeshadow"]
+    name: "Cleansers",
+    subcategories: ["Face Wash", "Gentle Cleanser", "Daily Cleanser", "Tea Tree", "Ubtan"]
+  },
+  {
+    name: "Serums",
+    subcategories: ["Niacinamide", "Vitamin C", "Hyaluronic", "Radiance", "Brightening"]
+  },
+  {
+    name: "Moisturizers",
+    subcategories: ["Moisturizing Cream", "Eye Gel", "Hydrating", "Barrier Care"]
+  },
+  {
+    name: "Sunscreen",
+    subcategories: ["SPF 50", "Sun Protection", "Daily Shield"]
   },
   {
     name: "Haircare",
-    subcategories: ["Shampoo", "Conditioner", "Hair Oil", "Mask", "Scalp Care", "Serum"]
-  },
-  {
-    name: "Fragrance",
-    subcategories: ["Perfume", "Mists", "Roll-on", "Gift Sets", "Body Splash"]
-  },
-  {
-    name: "Bath & Body",
-    subcategories: ["Body Wash", "Scrub", "Body Lotion", "Hand Cream", "Body Butter"]
-  },
-  {
-    name: "Tools",
-    subcategories: ["Brushes", "Sponges", "Gua Sha", "Face Roller", "Eyelash Curler"]
+    subcategories: ["Hair Oil", "Scalp Care", "Nourishing"]
   }
 ];
 
-function IconButton({ label, onClick, badge, children }) {
+function IconButton({ label, onClick, badge, pulse, children }) {
   return (
     <button
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="nav-icon-button"
+      className={`nav-icon-button ${pulse ? "nav-icon-button--pulse" : ""}`}
     >
       {children}
       {badge ? (
@@ -96,7 +97,7 @@ function IconGrid() {
   );
 }
 
-function Header({ products, cartCount = 0, wishlistCount = 0, onOpenQuiz }) {
+function Header({ products, cartCount = 0, wishlistCount = 0, cartPulse = false }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [query, setQuery] = useState("");
@@ -156,7 +157,12 @@ function Header({ products, cartCount = 0, wishlistCount = 0, onOpenQuiz }) {
                     className="flex w-full items-center justify-between border-b border-rose-50 px-4 py-3 text-left text-sm last:border-b-0 hover:bg-rose-50/40"
                   >
                     <span className="font-medium text-skin-ink">{item.name}</span>
-                    <span className="text-xs text-rose-700/70">{item.brand}</span>
+                    <BrandLogo
+                      brand={item.brand}
+                      showName
+                      className="brand-mark--suggestion"
+                      imgClassName="brand-mark__img--xs"
+                    />
                   </button>
                 ))}
               </div>
@@ -201,13 +207,20 @@ function Header({ products, cartCount = 0, wishlistCount = 0, onOpenQuiz }) {
               </div>
             </div>
 
-            <IconButton label="Wishlist" onClick={() => navigate("/category?wishlist=true")} badge={wishlistCount || undefined}>
+            <Link
+              to="/skin-analyzer"
+              className="hidden items-center rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-semibold text-rose-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-white md:inline-flex"
+            >
+              AI Skin Analyzer
+            </Link>
+
+            <IconButton label="Wishlist" onClick={() => navigate("/wishlist")} badge={wishlistCount || undefined}>
               <IconHeart filled={wishlistCount > 0} />
             </IconButton>
-            <IconButton label="Cart" onClick={() => navigate("/checkout")} badge={cartCount || undefined}>
+            <IconButton label="Cart" onClick={() => navigate("/cart")} badge={cartCount || undefined} pulse={cartPulse}>
               <IconBag />
             </IconButton>
-            <IconButton label="User Profile" onClick={onOpenQuiz}>
+            <IconButton label="User Profile" onClick={() => navigate("/profile")}>
               <IconUser />
             </IconButton>
           </div>

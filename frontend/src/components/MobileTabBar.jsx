@@ -2,12 +2,13 @@ import { NavLink } from "react-router-dom";
 
 const tabs = [
   { to: "/", label: "Home", icon: "◍" },
-  { to: "/category", label: "Categories", icon: "◫" },
-  { to: "/category?wishlist=true", label: "Wishlist", icon: "♡" },
-  { to: "/checkout", label: "Cart", icon: "◎" }
+  { to: "/catalog", label: "Explore", icon: "◫" },
+  { to: "/wishlist", label: "Wishlist", icon: "♡" },
+  { to: "/cart", label: "Cart", icon: "◎" },
+  { to: "/profile", label: "Profile", icon: "☺" }
 ];
 
-function MobileTabBar({ onOpenQuiz }) {
+function MobileTabBar() {
   return (
     <nav
       aria-label="Bottom navigation"
@@ -30,16 +31,6 @@ function MobileTabBar({ onOpenQuiz }) {
           <span className="mt-1">{tab.label}</span>
         </NavLink>
       ))}
-      <button
-        type="button"
-        onClick={() => onOpenQuiz?.()}
-        className="flex flex-col items-center justify-center rounded-xl py-2 text-[11px] font-semibold text-rose-900/65"
-      >
-        <span className="text-base leading-none" aria-hidden="true">
-          ☺
-        </span>
-        <span className="mt-1">Profile</span>
-      </button>
     </nav>
   );
 }

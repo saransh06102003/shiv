@@ -1,15 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import MobileTabBar from "./components/MobileTabBar";
 import SkinQuizModal from "./components/SkinQuizModal";
 import SplashScreen from "./components/SplashScreen";
+import BeautyAssistant from "./components/BeautyAssistant";
 import CategoryPage from "./pages/CategoryPage";
+import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import CatalogPage from "./pages/CatalogPage";
 import HomePage from "./pages/HomePage";
 import IngredientExplorerPage from "./pages/IngredientExplorerPage";
+import GiftMessagePage from "./pages/GiftMessagePage";
+import OrderHistoryPage from "./pages/OrderHistoryPage";
+import ProfilePage from "./pages/ProfilePage";
 import ProductPage from "./pages/ProductPage";
 import RoutineBuilderPage from "./pages/RoutineBuilderPage";
+import SkinAnalyzerPage from "./pages/SkinAnalyzerPage";
+import SkinProfileDashboard from "./pages/SkinProfileDashboard";
+import WishlistPage from "./pages/WishlistPage";
 import {
   discoverySections as fallbackDiscoverySections,
   ingredients as fallbackIngredients,
@@ -48,6 +57,7 @@ function readStoredJSON(key, fallback) {
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [data, setData] = useState({
     products: fallbackProducts,
     ingredients: fallbackIngredients,
@@ -63,6 +73,15 @@ function App() {
   const [alerts, setAlerts] = useState(() => readStoredJSON(STORAGE_KEYS.alerts, DEFAULT_ALERTS));
   const [showSplash, setShowSplash] = useState(true);
   const [isSplashExiting, setIsSplashExiting] = useState(false);
+  const [cartPulse, setCartPulse] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const effectiveProfile = useMemo(() => {
+    if (skinProfile) return skinProfile;
+    if (typeof window === "undefined") return null;
+    const storedSkinType = localStorage.getItem("skinType");
+    return storedSkinType ? { skinType: storedSkinType } : null;
+  }, [skinProfile]);
 
   useEffect(() => {
     const startExitTimer = window.setTimeout(() => {
@@ -139,8 +158,8 @@ function App() {
   }, [alerts]);
 
   const personalizedProducts = useMemo(
-    () => sortProductsByProfile(data.products, skinProfile),
-    [data.products, skinProfile]
+    () => sortProductsByProfile(data.products, effectiveProfile),
+    [data.products, effectiveProfile]
   );
 
   const productsById = useMemo(
@@ -150,6 +169,17 @@ function App() {
         return acc;
       }, {}),
     [personalizedProducts]
+  );
+
+  const cartSubtotal = useMemo(
+    () =>
+      cartItems.reduce((total, item) => {
+        const product = productsById[item.productId];
+        if (!product) return total;
+        const price = Math.round(product.price * (1 - product.discountPct / 100));
+        return total + price * Number(item.quantity || 0);
+      }, 0),
+    [cartItems, productsById]
   );
 
 
@@ -169,6 +199,10 @@ function App() {
       }
       return [...prev, { productId, quantity }];
     });
+    setCartPulse(true);
+    setToast("✨ Added to your beauty bag!");
+    window.setTimeout(() => setCartPulse(false), 500);
+    window.setTimeout(() => setToast(null), 1800);
   };
 
   const updateCartQuantity = (productId, quantity) => {
@@ -215,11 +249,15 @@ function App() {
 
   return (
     <div className={`min-h-screen bg-skin-gradient ${showSplash ? "h-screen overflow-hidden" : ""}`}>
+      <div className="site-banner">
+        <span>🎁 Send Beauty Gifts With A Personal Voice Message</span>
+        <p>Only on OpenLeaf Beauty · Personalized Voice Gifts</p>
+      </div>
       <Header
         products={personalizedProducts}
         cartCount={cartCount}
         wishlistCount={wishlistIds.length}
-        onOpenQuiz={() => setShowQuiz(true)}
+        cartPulse={cartPulse}
       />
 
       <main className="layout-container py-5 md:py-6">
@@ -239,11 +277,26 @@ function App() {
             element={
               <HomePage
                 products={personalizedProducts}
+                skinProfile={effectiveProfile}
                 ingredients={data.ingredients}
                 isLoading={isLoading}
                 onAddToCart={addToCart}
                 onToggleWishlist={toggleWishlist}
                 wishlistSet={wishlistSet}
+                onOpenAnalyzer={() => setShowQuiz(true)}
+              />
+            }
+          />
+          <Route
+            path="/catalog"
+            element={
+              <CatalogPage
+                products={personalizedProducts}
+                skinProfile={effectiveProfile}
+                onAddToCart={addToCart}
+                onToggleWishlist={toggleWishlist}
+                wishlistSet={wishlistSet}
+                isLoading={isLoading}
               />
             }
           />
@@ -252,14 +305,64 @@ function App() {
             element={
               <CategoryPage
                 products={personalizedProducts}
-                skinProfile={skinProfile}
+                skinProfile={effectiveProfile}
                 onAddToCart={addToCart}
                 onToggleWishlist={toggleWishlist}
                 wishlistSet={wishlistSet}
                 isLoading={isLoading}
+                onOpenAnalyzer={() => setShowQuiz(true)}
               />
             }
           />
+          <Route
+            path="/wishlist"
+            element={
+              <WishlistPage
+                products={personalizedProducts}
+                wishlistSet={wishlistSet}
+                onAddToCart={addToCart}
+                onToggleWishlist={toggleWishlist}
+              />
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <CartPage
+                cartItems={cartItems}
+                productsById={productsById}
+                onUpdateCartQty={updateCartQuantity}
+                onRemoveFromCart={removeFromCart}
+              />
+            }
+          />
+          <Route
+            path="/skin-analyzer"
+            element={<SkinAnalyzerPage skinProfile={effectiveProfile} onOpenAnalyzer={() => setShowQuiz(true)} />}
+          />
+          <Route
+            path="/skin-profile"
+            element={
+              <SkinProfileDashboard
+                products={personalizedProducts}
+                skinProfile={effectiveProfile}
+                onAddToCart={addToCart}
+                onToggleWishlist={toggleWishlist}
+                wishlistSet={wishlistSet}
+              />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProfilePage
+                skinProfile={effectiveProfile}
+                wishlistCount={wishlistIds.length}
+                cartCount={cartCount}
+              />
+            }
+          />
+          <Route path="/order-history" element={<OrderHistoryPage />} />
           <Route
             path="/product/:productId"
             element={
@@ -267,7 +370,7 @@ function App() {
                 products={personalizedProducts}
                 ingredients={data.ingredients}
                 reviews={data.reviews}
-                skinProfile={skinProfile}
+                skinProfile={effectiveProfile}
                 onAddToCart={addToCart}
                 onToggleWishlist={toggleWishlist}
                 wishlistSet={wishlistSet}
@@ -303,17 +406,45 @@ function App() {
               />
             }
           />
+          <Route path="/gift/:giftId" element={<GiftMessagePage />} />
           </Routes>
         </div>
       </main>
 
-      <MobileTabBar onOpenQuiz={() => setShowQuiz(true)} />
+      {cartCount > 0 ? (
+        <div className="fixed inset-x-0 bottom-24 z-40 mx-auto w-[calc(100%-1.2rem)] max-w-xl md:hidden">
+          <div className="flex items-center justify-between rounded-2xl border border-rose-100 bg-white/95 px-4 py-3 shadow-card backdrop-blur">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-rose-700/70">In your bag</p>
+              <p className="text-sm font-semibold text-skin-ink">
+                {cartCount} items • Rs {cartSubtotal}
+              </p>
+            </div>
+            <button type="button" onClick={() => navigate("/cart")} className="btn-primary !px-4 !py-2">
+              View cart
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+      {toast ? (
+        <div className="toast-banner">
+          {toast}
+        </div>
+      ) : null}
+
+      <MobileTabBar />
+
+      <BeautyAssistant products={personalizedProducts} skinProfile={effectiveProfile} onAddToCart={addToCart} />
 
       <SkinQuizModal
         open={showQuiz}
         initialProfile={skinProfile}
         onClose={() => setShowQuiz(false)}
         onSave={async (profile) => {
+          if (typeof window !== "undefined" && profile?.skinType) {
+            localStorage.setItem("skinType", profile.skinType);
+          }
           setSkinProfile(profile);
           setShowQuiz(false);
           try {

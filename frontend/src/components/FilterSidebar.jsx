@@ -1,4 +1,6 @@
-function FilterGroup({ title, items, selected, onToggle }) {
+import BrandLogo from "./BrandLogo";
+
+function FilterGroup({ title, items, selected, onToggle, renderItem }) {
   return (
     <div className="border-b border-rose-100 pb-4 last:border-b-0">
       <h3 className="mb-3 text-sm font-semibold text-skin-ink">{title}</h3>
@@ -11,7 +13,7 @@ function FilterGroup({ title, items, selected, onToggle }) {
               onChange={() => onToggle(item)}
               className="h-4 w-4 rounded border-rose-200 text-rose-500 focus:ring-rose-300"
             />
-            <span>{item}</span>
+            {renderItem ? renderItem(item) : <span>{item}</span>}
           </label>
         ))}
       </div>
@@ -65,6 +67,9 @@ function FilterSidebar({ filters, setFilters, allSkinTypes, allConcerns, allIngr
         items={allBrands}
         selected={filters.brands}
         onToggle={(value) => toggleValue("brands", value)}
+        renderItem={(brand) => (
+          <BrandLogo brand={brand} showName className="brand-mark--filter" imgClassName="brand-mark__img--xs" />
+        )}
       />
 
       <div className="space-y-3 border-b border-rose-100 pb-4">
